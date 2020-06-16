@@ -16,6 +16,7 @@ export default class integrationController implements IController {
     private _providers!: IIntegrationProvider[];
 
     initRoutes(): void {
+        this._providers.forEach(provider => provider.register(this._webServer, this.route));
         this._webServer.registerGet(`${this.route}`, (request: IRequest, response: IResponse) =>
             this.get(request, response));
     }

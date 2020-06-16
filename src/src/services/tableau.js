@@ -50,18 +50,28 @@ var inversify_1 = require("inversify");
 var tableauIntegration = /** @class */ (function () {
     function tableauIntegration() {
         this.name = "tableau";
+        this._baseUrl = "https://10ax.online.tableau.com";
     }
-    tableauIntegration.prototype.connect = function (userName, password) {
+    tableauIntegration.prototype.register = function (webServer, route) {
+        var _this = this;
+        webServer.registerPost(route + "/" + this.name, function (request, response) {
+            return _this.connect(request.body.username, request.body.password);
+        });
+    };
+    tableauIntegration.prototype.connect = function (username, password) {
         return __awaiter(this, void 0, void 0, function () {
             var url, credentials, config, response, site, userId;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        url = this._baseUrl + "/api/api-version/auth/signin";
+                        url = this._baseUrl + "/api/3.8/auth/signin";
                         credentials = {
                             "credentials": {
-                                "name": userName,
-                                "password": password
+                                "name": username,
+                                "password": password,
+                                "site": {
+                                    "contentUrl": "rupertdev966607"
+                                }
                             }
                         };
                         config = {
@@ -70,9 +80,13 @@ var tableauIntegration = /** @class */ (function () {
                                 'Accept': 'application/json'
                             }
                         };
+                        console.log("url", url);
+                        console.log("credentials", credentials);
+                        console.log("config", config);
                         return [4 /*yield*/, axios_1.default.post(url, credentials, config)];
                     case 1:
                         response = _a.sent();
+                        console.log("response.data", response.data);
                         this._authToken = response.data.credentials.token;
                         site = response.data.credentials.site;
                         userId = response.data.credentials.user.id;

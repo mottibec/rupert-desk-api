@@ -1,33 +1,48 @@
 import axios from "axios";
 import { injectable } from "inversify";
+import { IWebServer } from "../webserver/IWebServer";
+import { IRequest, IResponse } from "../webserver/IWebRequest";
 
 export interface IIntegrationProvider {
     name: string;
+    register(webServer: IWebServer, route: string): void;
     import(): Promise<void>;
 }
 
 @injectable()
 export class tableauIntegration implements IIntegrationProvider {
     name: string = "tableau";
-    private _baseUrl!: string;
+    private _baseUrl: string = "https://10ax.online.tableau.com";
     private _authToken!: string;
     private _siteId!: string;
 
-    async connect(userName: string, password: string) {
-        const url = `${this._baseUrl}/api/api-version/auth/signin`;
+    register(webServer: IWebServer, route: string) {
+        webServer.registerPost(`${route}/${this.name}`, (request: IRequest, response: IResponse) =>
+            this.connect(request.body.username, request.body.password));
+    }
+
+    async connect(username: string, password: string) {
+        const url = `${this._baseUrl}/api/3.8/auth/signin`;
         const credentials = {
             "credentials": {
-                "name": userName,
-                "password": password
+                "name": username,
+                "password": password,
+                "site": {
+                    "contentUrl": "rupertdev966607"
+                }
             }
-        }
+        };
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             }
         };
+        console.log("url", url);
+        console.log("credentials", credentials);
+        console.log("config", config);
         var response = await axios.post(url, credentials, config);
+        console.log("response.data", response.data);
         this._authToken = response.data.credentials.token;
         const site = response.data.credentials.site;
         const userId = response.data.credentials.user.id;

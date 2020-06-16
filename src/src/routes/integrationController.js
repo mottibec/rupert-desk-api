@@ -53,6 +53,7 @@ var integrationController = /** @class */ (function () {
     }
     integrationController.prototype.initRoutes = function () {
         var _this = this;
+        this._providers.forEach(function (provider) { return provider.register(_this._webServer, _this.route); });
         this._webServer.registerGet("" + this.route, function (request, response) {
             return _this.get(request, response);
         });
