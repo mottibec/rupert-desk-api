@@ -60,9 +60,16 @@ var integrationController = /** @class */ (function () {
     };
     integrationController.prototype.get = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
+            var integrations;
+            var _this = this;
             return __generator(this, function (_a) {
-                response.json(this._providers.map(function (p) { return p.name; }));
-                return [2 /*return*/];
+                console.log(this._providers);
+                integrations = this._providers.map(function (p) { return ({
+                    name: p.name,
+                    url: _this.route + "/" + p.name
+                }); });
+                console.log(integrations);
+                return [2 /*return*/, response.json(integrations)];
             });
         });
     };

@@ -21,7 +21,13 @@ export default class integrationController implements IController {
             this.get(request, response));
     }
     async get(request: IRequest, response: IResponse) {
-        response.json(this._providers.map(p => p.name));
+        console.log(this._providers);
+        const integrations = this._providers.map(p => ({
+            name: p.name,
+            url: `${this.route}/${p.name}`
+        }));
+        console.log(integrations);
+        return response.json(integrations);
     }
 
     async import(request: IRequest, response: IResponse) {
