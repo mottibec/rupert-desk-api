@@ -1,0 +1,59 @@
+{
+  "name": "rupert-desk-api",
+  "version": "1.0.0",
+  "description": "rupert  api",
+  "main": "app.js",
+  "scripts": {
+    "tsc": "tsc",
+    "build": "npm run tsc",
+    "serve": "node src/server.js",
+    "start": "npm run build && npm run serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mottibec/rupert-desk-api.git"
+  },
+  "author": "motti bechhoder",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/mottibec/rupert-desk-api/issues"
+  },
+  "homepage": "https://github.com/mottibec/rupert-desk-api#readme",
+  "dependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/cors": "^2.8.6",
+    "@types/ejs": "^3.0.0",
+    "@types/express": "^4.17.2",
+    "@types/mongoose": "^5.5.32",
+    "@types/node": "^11.15.3",
+    "@types/passport": "^1.0.2",
+    "@types/passport-facebook": "^2.1.9",
+    "@types/passport-facebook-token": "^0.4.33",
+    "@types/passport-google-oauth": "^1.0.41",
+    "@types/passport-jwt": "^3.0.3",
+    "@types/passport-local": "^1.0.33",
+    "@types/socket.io": "^2.1.4",
+    "axios": "^0.19.0",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "google-auth-library": "^4.2.6",
+    "inversify": "^5.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.14",
+    "passport": "^0.4.0",
+    "passport-facebook": "^3.0.0",
+    "passport-facebook-token": "^3.3.0",
+    "passport-google-oauth": "^2.0.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "reflect-metadata": "^0.1.13",
+    "request": "^2.88.0",
+    "snyk": "^1.258.1",
+    "socket.io": "^2.3.0",
+    "typescript": "^3.7.3"
+  },
+  "snyk": true
+}
