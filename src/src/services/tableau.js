@@ -55,12 +55,27 @@ var tableauIntegration = /** @class */ (function () {
     tableauIntegration.prototype.register = function (webServer, route) {
         var _this = this;
         webServer.registerPost(route + "/" + this.name, function (request, response) {
-            return _this.connect(request.body.username, request.body.password);
+            return _this.process(request, response);
+        });
+    };
+    tableauIntegration.prototype.process = function (request, response) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.connect(request.body.username, request.body.password)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.import()];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
     };
     tableauIntegration.prototype.connect = function (username, password) {
         return __awaiter(this, void 0, void 0, function () {
-            var url, credentials, config, response, site, userId;
+            var url, credentials, config, response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -80,16 +95,12 @@ var tableauIntegration = /** @class */ (function () {
                                 'Accept': 'application/json'
                             }
                         };
-                        console.log("url", url);
-                        console.log("credentials", credentials);
-                        console.log("config", config);
                         return [4 /*yield*/, axios_1.default.post(url, credentials, config)];
                     case 1:
                         response = _a.sent();
-                        console.log("response.data", response.data);
                         this._authToken = response.data.credentials.token;
-                        site = response.data.credentials.site;
-                        userId = response.data.credentials.user.id;
+                        this._siteId = response.data.credentials.site.id;
+                        console.log("enc connect");
                         return [2 /*return*/];
                 }
             });
@@ -101,11 +112,13 @@ var tableauIntegration = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        url = "sites/" + this._siteId + "/workbooks";
+                        url = this._baseUrl + "/api/3.8/sites/" + this._siteId + "/workbooks";
+                        console.log("get() url", url);
                         return [4 /*yield*/, axios_1.default.get(url, this.getDefaultConfig())];
                     case 1:
                         response = _a.sent();
-                        return [2 /*return*/];
+                        console.log("get() response.data", response.data);
+                        return [2 /*return*/, response.data.workbooks.workbook.map(function (w) { return w; })];
                 }
             });
         });
@@ -127,15 +140,16 @@ var tableauIntegration = /** @class */ (function () {
     };
     tableauIntegration.prototype.import = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var workbookIds, ids;
-            var _this = this;
+            var workbooks;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        workbookIds = ["test"];
-                        return [4 /*yield*/, Promise.all(workbookIds.map(function (id) { return _this.getById(id); }))];
+                        console.log("import");
+                        return [4 /*yield*/, this.get()];
                     case 1:
-                        ids = _a.sent();
+                        workbooks = _a.sent();
+                        console.log("workbooks", workbooks);
+                        console.log("end import");
                         return [2 /*return*/];
                 }
             });

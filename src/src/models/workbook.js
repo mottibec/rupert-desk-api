@@ -1,7 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var workbook = /** @class */ (function () {
-    function workbook() {
+    function workbook(id, name, contentUrl, webpageUrl) {
+        this.id = id;
+        this.name = name;
+        this.contentUrl = contentUrl;
+        this.webpageUrl = webpageUrl;
     }
     return workbook;
 }());

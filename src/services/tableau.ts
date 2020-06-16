@@ -2,6 +2,7 @@ import axios from "axios";
 import { injectable } from "inversify";
 import { IWebServer } from "../webserver/IWebServer";
 import { IRequest, IResponse } from "../webserver/IWebRequest";
+import { workbook } from "../models/workbook";
 
 export interface IIntegrationProvider {
     name: string;
@@ -18,9 +19,13 @@ export class tableauIntegration implements IIntegrationProvider {
 
     register(webServer: IWebServer, route: string) {
         webServer.registerPost(`${route}/${this.name}`, (request: IRequest, response: IResponse) =>
-            this.connect(request.body.username, request.body.password));
+            this.process(request, response)
+        );
     }
-
+    async process(request: IRequest, response: IResponse) {
+        await this.connect(request.body.username, request.body.password);
+        await this.import();
+    }
     async connect(username: string, password: string) {
         const url = `${this._baseUrl}/api/3.8/auth/signin`;
         const credentials = {
@@ -38,20 +43,18 @@ export class tableauIntegration implements IIntegrationProvider {
                 'Accept': 'application/json'
             }
         };
-        console.log("url", url);
-        console.log("credentials", credentials);
-        console.log("config", config);
         var response = await axios.post(url, credentials, config);
-        console.log("response.data", response.data);
         this._authToken = response.data.credentials.token;
-        const site = response.data.credentials.site;
-        const userId = response.data.credentials.user.id;
-
+        this._siteId = response.data.credentials.site.id;
+        console.log("enc connect");
     }
 
     async get() {
-        const url = `sites/${this._siteId}/workbooks`;
+        const url = `${this._baseUrl}/api/3.8/sites/${this._siteId}/workbooks`;
+        console.log("get() url", url)
         var response = await axios.get(url, this.getDefaultConfig());
+        console.log("get() response.data", response.data)
+        return response.data.workbooks.workbook.map((w: any) => w as workbook);
     }
 
     async getById(workbookId: string) {
@@ -60,8 +63,10 @@ export class tableauIntegration implements IIntegrationProvider {
     }
 
     async import() {
-        const workbookIds: string[] = ["test"];
-        var ids = await Promise.all(workbookIds.map(id => this.getById(id)));
+        console.log("import");
+        const workbooks = await this.get();
+        console.log("workbooks", workbooks);
+        console.log("end import");
     }
 
     getDefaultConfig() {
