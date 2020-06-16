@@ -1,4 +1,6 @@
-const TYPES = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var TYPES = {
     IWebServer: Symbol.for("IWebServer"),
     IController: Symbol.for("IController"),
     IAuthProvider: Symbol.for("IAuthProvider"),
@@ -6,4 +8,4 @@ const TYPES = {
     AuthService: Symbol.for("AuthService"),
     IIntegrationProvider: Symbol.for("IIntegrationProvider")
 };
-export { TYPES };
+exports.TYPES = TYPES;

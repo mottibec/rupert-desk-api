@@ -4,13 +4,11 @@ import config from "../config/config";
 import jwt from "jsonwebtoken";
 import { injectable, inject } from "inversify";
 import { TYPES } from "../config/inversify.types";
-import { AccountService } from "./accountService";
 
 @injectable()
 export default class JWTService {
 
-    @inject(TYPES.AccountService)
-    private _userService!: AccountService;
+    private _userService!: any;
 
     register() {
         passport.use(new jwtStrategy({

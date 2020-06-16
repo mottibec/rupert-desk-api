@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var UserRepository_1 = require("../database/UserRepository");
-var inversify_types_1 = require("../inversify.types");
+var inversify_types_1 = require("../config/inversify.types");
 var inversify_1 = require("inversify");
 var UserService = /** @class */ (function () {
     function UserService() {
@@ -30,9 +30,10 @@ var UserService = /** @class */ (function () {
     UserService.prototype.update = function (user) {
         return this._userRepository.update(user);
     };
+    var _a;
     __decorate([
         inversify_1.inject(inversify_types_1.TYPES.UserRepository),
-        __metadata("design:type", UserRepository_1.UserRepository)
+        __metadata("design:type", typeof (_a = typeof UserRepository_1.UserRepository !== "undefined" && UserRepository_1.UserRepository) === "function" ? _a : Object)
     ], UserService.prototype, "_userRepository", void 0);
     UserService = __decorate([
         inversify_1.injectable()

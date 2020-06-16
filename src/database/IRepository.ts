@@ -1,12 +1,12 @@
 export interface IRepository<T> {
 
-    create(item: T): Promise<boolean>;
+    create(item: T): boolean;
 
-    update(item: T): Promise<boolean>;
+    update(item: T): boolean;
 
-    find(query: any): Promise<T[]>;
+    find(query: any): T[];
 
-    findOne(query: any): Promise<T | null>;
+    findOne(query: any): T | null;
 
-    findById(id: string): Promise<T | null>;
+    findById(id: string): T | null;
 }

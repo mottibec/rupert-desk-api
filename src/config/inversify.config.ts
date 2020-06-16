@@ -4,15 +4,12 @@ import { TYPES } from "./inversify.types";
 import { IWebServer } from "../webserver/IWebServer";
 import ExpressWebServer from "../webserver/ExpressWebServer";
 import IController from "../routes/IController";
-import { UserRepository } from "../database/UserRepository";
-import { UserService } from "../services/userService";
 import authenticationController from "../routes/authentication";
 import { IAuthProvider, LocalAuthProvider } from "../services/authProvider";
 import JWTService from "../services/jwtService";
 import AuthService from "../services/authService";
-import dbManager from "../database/dbManager";
-import { AccountService } from "../services/accountService";
-import { AccountRepository } from "./database/AccountRepository";
+import { tableauIntegration } from "../services/tableau";
+import integrationController from "../routes/integrationController";
 
 
 const container = new Container();
@@ -23,25 +20,16 @@ container.bind<IWebServer>(TYPES.IWebServer)
     .inSingletonScope();
 
 //repo
-container.bind<UserRepository>(TYPES.UserRepository)
-    .to(UserRepository)
-    .inSingletonScope();
-
-container.bind<AccountRepository>(TYPES.AccountRepository)
-    .to(AccountRepository)
-    .inSingletonScope();
 
 //services
-container.bind<AccountService>(TYPES.AccountService)
-    .to(AccountService);
-container.bind<UserService>(TYPES.UserService)
-    .to(UserService);
 container.bind<AuthService>(TYPES.AuthService)
     .to(AuthService);
 container.bind<JWTService>(TYPES.JWTService)
     .to(JWTService);
-container.bind<dbManager>(TYPES.DbManager)
-    .to(dbManager);
+
+//
+container.bind<tableauIntegration>(TYPES.IIntegrationProvider)
+.to(tableauIntegration);
 
 //auth providers
 container.bind<IAuthProvider>(TYPES.IAuthProvider)
@@ -49,8 +37,8 @@ container.bind<IAuthProvider>(TYPES.IAuthProvider)
 
 //controllers
 container.bind<IController>(TYPES.IController)
-    .to(UserController);
-container.bind<IController>(TYPES.IController)
     .to(authenticationController);
+container.bind<IController>(TYPES.IController)
+.to(integrationController);
 
 export { container };  

@@ -44,72 +44,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var inversify_types_1 = require("../config/inversify.types");
 var inversify_1 = require("inversify");
-var jwtService_1 = __importDefault(require("../services/jwtService"));
-var authService_1 = __importDefault(require("../services/authService"));
-var authenticationController = /** @class */ (function () {
-    function authenticationController() {
-        this.route = "/auth";
+var inversify_types_1 = require("../config/inversify.types");
+var integrationController = /** @class */ (function () {
+    function integrationController() {
+        this.route = "/integration";
     }
-    authenticationController.prototype.initRoutes = function () {
+    integrationController.prototype.initRoutes = function () {
         var _this = this;
-        this._providers.forEach(function (provider) { return provider.register(_this._webServer, _this.route); });
-        this._webServer.registerPost(this.route + "/signup", function (request, response) {
-            return _this.signUp(request, response);
+        this._webServer.registerGet("" + this.route, function (request, response) {
+            return _this.get(request, response);
         });
     };
-    authenticationController.prototype.signUp = function (request, response) {
+    integrationController.prototype.get = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
-            var signUpData, savedUser, _a, user, account, accountResult, token;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        signUpData = request.body;
-                        return [4 /*yield*/, this._accountService.findByEmail(signUpData.email)];
-                    case 1:
-                        savedUser = _b.sent();
-                        if (savedUser) {
-                            return [2 /*return*/, response
-                                    .status(400)
-                                    .json({
-                                    error: "The email address you have entered is already registered"
-                                })];
-                        }
-                        return [4 /*yield*/, this.createUser(signUpData)];
-                    case 2:
-                        _a = _b.sent(), user = _a.user, account = _a.account;
-                        return [4 /*yield*/, this._accountService.createAccount(account)];
-                    case 3:
-                        accountResult = _b.sent();
-                        if (accountResult) {
-                            token = this._tokenService.sign({ email: account.email });
-                            response.send({ access_token: token, username: user.name });
-                        }
-                        response.status(400);
-                        return [2 /*return*/];
-                }
+            return __generator(this, function (_a) {
+                response.json(this._providers.map(function (p) { return p.name; }));
+                return [2 /*return*/];
             });
         });
     };
-    authenticationController.prototype.createUser = function (signUpData) {
+    integrationController.prototype.import = function (request, response) {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var account, _a;
+            var integrationProviderName, integration;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        account = {
-                            password: ""
-                        };
-                        _a = account;
-                        return [4 /*yield*/, this._authService.hash(signUpData.password)];
+                        integrationProviderName = request.body.name;
+                        integration = this._providers.find(function (p) { return p.name == integrationProviderName; });
+                        return [4 /*yield*/, ((_a = integration) === null || _a === void 0 ? void 0 : _a.import())];
                     case 1:
-                        _a.password = _b.sent();
-                        return [2 /*return*/, account];
+                        _b.sent();
+                        return [2 /*return*/];
                 }
             });
         });
@@ -117,22 +85,14 @@ var authenticationController = /** @class */ (function () {
     __decorate([
         inversify_1.inject(inversify_types_1.TYPES.IWebServer),
         __metadata("design:type", Object)
-    ], authenticationController.prototype, "_webServer", void 0);
+    ], integrationController.prototype, "_webServer", void 0);
     __decorate([
-        inversify_1.multiInject(inversify_types_1.TYPES.IAuthProvider),
+        inversify_1.multiInject(inversify_types_1.TYPES.IIntegrationProvider),
         __metadata("design:type", Array)
-    ], authenticationController.prototype, "_providers", void 0);
-    __decorate([
-        inversify_1.inject(inversify_types_1.TYPES.JWTService),
-        __metadata("design:type", jwtService_1.default)
-    ], authenticationController.prototype, "_tokenService", void 0);
-    __decorate([
-        inversify_1.inject(inversify_types_1.TYPES.AuthService),
-        __metadata("design:type", authService_1.default)
-    ], authenticationController.prototype, "_authService", void 0);
-    authenticationController = __decorate([
+    ], integrationController.prototype, "_providers", void 0);
+    integrationController = __decorate([
         inversify_1.injectable()
-    ], authenticationController);
-    return authenticationController;
+    ], integrationController);
+    return integrationController;
 }());
-exports.default = authenticationController;
+exports.default = integrationController;

@@ -7,7 +7,6 @@ import { IRequest, IResponse } from "../webserver/IWebRequest";
 import JWTService from "./jwtService";
 import { TYPES } from "../config/inversify.types";
 import AuthService from "./authService";
-import { AccountService } from "./accountService";
 
 export interface IAuthProvider {
     register(webServer: IWebServer, route: string): void;
@@ -20,8 +19,7 @@ export class LocalAuthProvider implements IAuthProvider {
     @inject(TYPES.JWTService)
     private _jwtService!: JWTService;
 
-    @inject(TYPES.AccountService)
-    private _accountService!: AccountService;
+    private _accountService!: any;
 
     @inject(TYPES.AuthService)
     private _authService!: AuthService;

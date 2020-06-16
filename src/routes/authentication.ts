@@ -4,10 +4,8 @@ import { IWebServer } from "../webserver/IWebServer";
 import { inject, multiInject, injectable } from "inversify";
 import { IAuthProvider } from "../services/authProvider";
 import { IRequest, IResponse } from "../webserver/IWebRequest";
-import { UserService } from "../services/userService";
 import JWTService from "../services/jwtService";
 import AuthService from "../services/authService";
-import { AccountService } from "../services/accountService";
 
 @injectable()
 export default class authenticationController implements IController {
@@ -24,6 +22,8 @@ export default class authenticationController implements IController {
 
     @inject(TYPES.AuthService)
     private _authService!: AuthService;
+
+    private _accountService!: any;
 
     initRoutes(): void {
         this._providers.forEach(provider => provider.register(this._webServer, this.route));
@@ -42,41 +42,18 @@ export default class authenticationController implements IController {
         }
 
         let { user, account } = await this.createUser(signUpData);
-        const userResult = await this._userService.createUser(user);
         const accountResult = await this._accountService.createAccount(account);
-        if (userResult && accountResult) {
+        if (accountResult) {
             var token = this._tokenService.sign({ email: account.email });
             response.send({ access_token: token, username: user.name });
         }
         response.status(400);
     }
     async createUser(signUpData: any): Promise<any> {
-        var instagramData = await this._igService.getUserInfo(signUpData.instagram);
-        var user = <iUser>{
-            name: instagramData.name,
-            email: signUpData.email,
-            avatar: instagramData.profile,
-            instagram: signUpData.instagram,
-            topPost: instagramData.topPost,
-            whatsapp: signUpData.whatsapp,
-            followersCount: instagramData.followersCount,
-            activeFollowers: instagramData.activeFollowers,
-            conversionRate: signUpData.conversionRate,
-            priceForPost: signUpData.priceForPost,
-            location: signUpData.location
+        const account = {
+            password: ""
         };
-
-        var account = <iAccount>{
-            name: instagramData.name,
-            email: signUpData.email,
-            avatar: instagramData.profile,
-            gender: gender.other,
-            authProvider: authProvider.local,
-            password: signUpData.password
-        };
-
         account.password = await this._authService.hash(signUpData.password);
-
-        return { user, account };
+        return account;
     }
 }

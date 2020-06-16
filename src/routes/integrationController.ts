@@ -1,10 +1,11 @@
 import IController from "./IController";
-import { inject, multiInject } from "inversify";
+import { inject, multiInject, injectable } from "inversify";
 import { TYPES } from "../config/inversify.types";
 import { IWebServer } from "../webserver/IWebServer";
 import { IIntegrationProvider } from "../services/tableau";
 import { IRequest, IResponse } from "../webserver/IWebRequest";
 
+@injectable()
 export default class integrationController implements IController {
     route: string = "/integration";
 
@@ -13,13 +14,19 @@ export default class integrationController implements IController {
 
     @multiInject(TYPES.IIntegrationProvider)
     private _providers!: IIntegrationProvider[];
-    
+
     initRoutes(): void {
-        this._webServer.registerProtectedGet(`${this.route}`, (request: IRequest, response: IResponse) =>
+        this._webServer.registerGet(`${this.route}`, (request: IRequest, response: IResponse) =>
             this.get(request, response));
     }
-    async get(request: IRequest, response: IResponse){
+    async get(request: IRequest, response: IResponse) {
         response.json(this._providers.map(p => p.name));
+    }
+
+    async import(request: IRequest, response: IResponse) {
+        const integrationProviderName = request.body.name;
+        const integration = this._providers.find(p => p.name == integrationProviderName);
+        await integration?.import();
     }
 
 }

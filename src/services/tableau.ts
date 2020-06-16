@@ -1,9 +1,12 @@
 import axios from "axios";
+import { injectable } from "inversify";
 
 export interface IIntegrationProvider {
     name: string;
+    import(): Promise<void>;
 }
 
+@injectable()
 export class tableauIntegration implements IIntegrationProvider {
     name: string = "tableau";
     private _baseUrl!: string;
@@ -39,6 +42,11 @@ export class tableauIntegration implements IIntegrationProvider {
     async getById(workbookId: string) {
         const url = `sites/${this._siteId}/workbooks/${workbookId}`;
         var response = await axios.get(url, this.getDefaultConfig());
+    }
+
+    async import() {
+        const workbookIds: string[] = ["test"];
+        var ids = await Promise.all(workbookIds.map(id => this.getById(id)));
     }
 
     getDefaultConfig() {

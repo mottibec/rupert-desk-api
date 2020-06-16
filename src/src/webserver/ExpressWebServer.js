@@ -18,7 +18,7 @@ var inversify_1 = require("inversify");
 var passport_1 = __importDefault(require("passport"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var jwtService_1 = __importDefault(require("../services/jwtService"));
-var inversify_types_1 = require("../inversify.types");
+var inversify_types_1 = require("../config/inversify.types");
 var cors_1 = __importDefault(require("cors"));
 var ExpressWebServer = /** @class */ (function () {
     function ExpressWebServer() {

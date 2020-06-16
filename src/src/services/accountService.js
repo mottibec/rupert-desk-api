@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var inversify_types_1 = require("../inversify.types");
+var inversify_types_1 = require("../config/inversify.types");
 var inversify_1 = require("inversify");
 var AccountRepository_1 = require("../database/AccountRepository");
 var AccountService = /** @class */ (function () {

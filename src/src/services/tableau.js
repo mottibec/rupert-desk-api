@@ -5,9 +5,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -48,80 +45,99 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var passport_1 = __importDefault(require("passport"));
-var passport_local_1 = require("passport-local");
+var axios_1 = __importDefault(require("axios"));
 var inversify_1 = require("inversify");
-var jwtService_1 = __importDefault(require("./jwtService"));
-var inversify_types_1 = require("../config/inversify.types");
-var authService_1 = __importDefault(require("./authService"));
-var LocalAuthProvider = /** @class */ (function () {
-    function LocalAuthProvider() {
+var tableauIntegration = /** @class */ (function () {
+    function tableauIntegration() {
+        this.name = "tableau";
     }
-    LocalAuthProvider.prototype.register = function (webServer, route) {
-        var _this = this;
-        passport_1.default.use(new passport_local_1.Strategy({
-            usernameField: 'email',
-            passwordField: 'password',
-            session: false
-        }, function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
-            return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                return [2 /*return*/, this.verifyAccount.apply(this, args)];
-            }); });
-        }));
-        webServer.registerPost(route + "/login", function (request, response, next) {
-            return passport_1.default.authenticate("local", { session: false }, function (err, user, info) {
-                if (err || !user) {
-                    return response
-                        .status(400)
-                        .json({
-                        error: err,
-                        user: user,
-                        info: info
-                    });
-                }
-                var token = _this._jwtService.sign(user);
-                return response.json({ username: user.name, access_token: token });
-            })(request, response, next);
-        });
-        this._jwtService.register();
-    };
-    LocalAuthProvider.prototype.verifyAccount = function (userName, password, callback) {
+    tableauIntegration.prototype.connect = function (userName, password) {
         return __awaiter(this, void 0, void 0, function () {
-            var account, doseMatch;
+            var url, credentials, config, response, site, userId;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this._accountService.findByEmail(userName)];
+                    case 0:
+                        url = this._baseUrl + "/api/api-version/auth/signin";
+                        credentials = {
+                            "credentials": {
+                                "name": userName,
+                                "password": password
+                            }
+                        };
+                        config = {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            }
+                        };
+                        return [4 /*yield*/, axios_1.default.post(url, credentials, config)];
                     case 1:
-                        account = _a.sent();
-                        if (!account) {
-                            return [2 /*return*/, callback(null, false, "invalid user name or password")];
-                        }
-                        return [4 /*yield*/, this._authService.verifyHash(password, account.password || "")];
-                    case 2:
-                        doseMatch = _a.sent();
-                        if (!doseMatch) {
-                            return [2 /*return*/, callback(null, false, "invalid user name or password")];
-                        }
-                        return [2 /*return*/, callback(null, { email: account.email, name: account.name })];
+                        response = _a.sent();
+                        this._authToken = response.data.credentials.token;
+                        site = response.data.credentials.site;
+                        userId = response.data.credentials.user.id;
+                        return [2 /*return*/];
                 }
             });
         });
     };
-    __decorate([
-        inversify_1.inject(inversify_types_1.TYPES.JWTService),
-        __metadata("design:type", jwtService_1.default)
-    ], LocalAuthProvider.prototype, "_jwtService", void 0);
-    __decorate([
-        inversify_1.inject(inversify_types_1.TYPES.AuthService),
-        __metadata("design:type", authService_1.default)
-    ], LocalAuthProvider.prototype, "_authService", void 0);
-    LocalAuthProvider = __decorate([
+    tableauIntegration.prototype.get = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var url, response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        url = "sites/" + this._siteId + "/workbooks";
+                        return [4 /*yield*/, axios_1.default.get(url, this.getDefaultConfig())];
+                    case 1:
+                        response = _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    tableauIntegration.prototype.getById = function (workbookId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var url, response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        url = "sites/" + this._siteId + "/workbooks/" + workbookId;
+                        return [4 /*yield*/, axios_1.default.get(url, this.getDefaultConfig())];
+                    case 1:
+                        response = _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    tableauIntegration.prototype.import = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var workbookIds, ids;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        workbookIds = ["test"];
+                        return [4 /*yield*/, Promise.all(workbookIds.map(function (id) { return _this.getById(id); }))];
+                    case 1:
+                        ids = _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    tableauIntegration.prototype.getDefaultConfig = function () {
+        return {
+            headers: {
+                'Accept': 'application/json',
+                'X-Tableau-Auth': this._authToken
+            }
+        };
+    };
+    tableauIntegration = __decorate([
         inversify_1.injectable()
-    ], LocalAuthProvider);
-    return LocalAuthProvider;
+    ], tableauIntegration);
+    return tableauIntegration;
 }());
-exports.LocalAuthProvider = LocalAuthProvider;
+exports.tableauIntegration = tableauIntegration;
