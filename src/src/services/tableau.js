@@ -5,6 +5,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -47,8 +50,42 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = __importDefault(require("axios"));
 var inversify_1 = require("inversify");
+var passwordCredentials = /** @class */ (function () {
+    function passwordCredentials() {
+    }
+    passwordCredentials.prototype.getFields = function () {
+        return ["name", "password"];
+    };
+    passwordCredentials.prototype.get = function () {
+        return { name: this.name, password: this.password };
+    };
+    return passwordCredentials;
+}());
+var patCredentials = /** @class */ (function () {
+    function patCredentials() {
+    }
+    patCredentials.prototype.getFields = function () {
+        return ["pat"];
+    };
+    patCredentials.prototype.get = function () {
+        return { pat: this.pat };
+    };
+    return patCredentials;
+}());
+var tableauCredentialsProvider = /** @class */ (function () {
+    function tableauCredentialsProvider() {
+    }
+    tableauCredentialsProvider.prototype.getCredentials = function () {
+        return [
+            new passwordCredentials(),
+            new patCredentials()
+        ];
+    };
+    return tableauCredentialsProvider;
+}());
 var tableauIntegration = /** @class */ (function () {
     function tableauIntegration() {
+        this.credProvider = new tableauCredentialsProvider();
         this.name = "tableau";
         this._baseUrl = "https://10ax.online.tableau.com";
     }
@@ -60,9 +97,12 @@ var tableauIntegration = /** @class */ (function () {
     };
     tableauIntegration.prototype.process = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
+            var creds;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.connect(request.body.username, request.body.password)];
+                    case 0:
+                        creds = this.getCredentials(request.body);
+                        return [4 /*yield*/, this.connect(creds)];
                     case 1:
                         _a.sent();
                         return [4 /*yield*/, this.import()];
@@ -73,35 +113,60 @@ var tableauIntegration = /** @class */ (function () {
             });
         });
     };
-    tableauIntegration.prototype.connect = function (username, password) {
+    tableauIntegration.prototype.getCredentials = function (body) {
+        if (body.username && body.password) {
+            var passCredentials = new passwordCredentials();
+            passCredentials.name = body.username;
+            passCredentials.password = body.password;
+            console.log("passCredentials", passCredentials);
+            return passCredentials;
+        }
+        var patCreds = new patCredentials();
+        patCreds.pat = body.pat;
+        return patCreds;
+    };
+    tableauIntegration.prototype.connect = function (credentials) {
         return __awaiter(this, void 0, void 0, function () {
-            var url, credentials, config, response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var url, requestCredentials, _i, _a, _b, key, value, json, config, response, error_1;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         url = this._baseUrl + "/api/3.8/auth/signin";
-                        credentials = {
-                            "credentials": {
-                                "name": username,
-                                "password": password,
-                                "site": {
-                                    "contentUrl": "rupertdev966607"
+                        requestCredentials = {
+                            credentials: {
+                                site: {
+                                    contentUrl: "rupertdev966607"
                                 }
                             }
                         };
+                        for (_i = 0, _a = Object.entries(credentials.get()); _i < _a.length; _i++) {
+                            _b = _a[_i], key = _b[0], value = _b[1];
+                            requestCredentials.credentials[key] = value;
+                        }
+                        json = JSON.stringify(requestCredentials);
+                        console.log("json", json);
                         config = {
                             headers: {
                                 'Content-Type': 'application/json',
                                 'Accept': 'application/json'
                             }
                         };
-                        return [4 /*yield*/, axios_1.default.post(url, credentials, config)];
+                        _c.label = 1;
                     case 1:
-                        response = _a.sent();
+                        _c.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, axios_1.default.post(url, json, config)];
+                    case 2:
+                        response = _c.sent();
+                        console.log("response.data", response.data);
                         this._authToken = response.data.credentials.token;
                         this._siteId = response.data.credentials.site.id;
-                        console.log("enc connect");
-                        return [2 /*return*/];
+                        console.log("response.data.credentials", response.data.credentials);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_1 = _c.sent();
+                        console.error(error_1);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -113,11 +178,9 @@ var tableauIntegration = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         url = this._baseUrl + "/api/3.8/sites/" + this._siteId + "/workbooks";
-                        console.log("get() url", url);
                         return [4 /*yield*/, axios_1.default.get(url, this.getDefaultConfig())];
                     case 1:
                         response = _a.sent();
-                        console.log("get() response.data", response.data);
                         return [2 /*return*/, response.data.workbooks.workbook.map(function (w) { return w; })];
                 }
             });
@@ -143,13 +206,10 @@ var tableauIntegration = /** @class */ (function () {
             var workbooks;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log("import");
-                        return [4 /*yield*/, this.get()];
+                    case 0: return [4 /*yield*/, this.get()];
                     case 1:
                         workbooks = _a.sent();
                         console.log("workbooks", workbooks);
-                        console.log("end import");
                         return [2 /*return*/];
                 }
             });
@@ -164,7 +224,8 @@ var tableauIntegration = /** @class */ (function () {
         };
     };
     tableauIntegration = __decorate([
-        inversify_1.injectable()
+        inversify_1.injectable(),
+        __metadata("design:paramtypes", [])
     ], tableauIntegration);
     return tableauIntegration;
 }());

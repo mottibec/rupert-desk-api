@@ -66,7 +66,8 @@ var integrationController = /** @class */ (function () {
                 console.log(this._providers);
                 integrations = this._providers.map(function (p) { return ({
                     name: p.name,
-                    url: _this.route + "/" + p.name
+                    loginUrl: _this.route + "/" + p.name,
+                    supportedAuthenticationMethods: p.credProvider.getCredentials().map(function (cp) { return cp.get(); })
                 }); });
                 console.log(integrations);
                 return [2 /*return*/, response.json(integrations)];

@@ -24,7 +24,8 @@ export default class integrationController implements IController {
         console.log(this._providers);
         const integrations = this._providers.map(p => ({
             name: p.name,
-            url: `${this.route}/${p.name}`
+            loginUrl: `${this.route}/${p.name}`,
+            supportedAuthenticationMethods: p.credProvider.getCredentials().map(cp => cp.get())
         }));
         console.log(integrations);
         return response.json(integrations);
