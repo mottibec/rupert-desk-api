@@ -63,13 +63,11 @@ var integrationController = /** @class */ (function () {
             var integrations;
             var _this = this;
             return __generator(this, function (_a) {
-                console.log(this._providers);
                 integrations = this._providers.map(function (p) { return ({
                     name: p.name,
                     loginUrl: _this.route + "/" + p.name,
-                    supportedAuthenticationMethods: p.credProvider.getCredentials().map(function (cp) { return cp.get(); })
+                    supportedAuthenticationMethods: p.credProvider.getCredentials().map(function (cp) { return cp.getFields(); })
                 }); });
-                console.log(integrations);
                 return [2 /*return*/, response.json(integrations)];
             });
         });

@@ -2,7 +2,7 @@ import IController from "./IController";
 import { inject, multiInject, injectable } from "inversify";
 import { TYPES } from "../config/inversify.types";
 import { IWebServer } from "../webserver/IWebServer";
-import { IIntegrationProvider } from "../services/tableau";
+import { IIntegrationProvider } from "../integrations/integrationProvider";
 import { IRequest, IResponse } from "../webserver/IWebRequest";
 
 @injectable()
@@ -21,13 +21,11 @@ export default class integrationController implements IController {
             this.get(request, response));
     }
     async get(request: IRequest, response: IResponse) {
-        console.log(this._providers);
         const integrations = this._providers.map(p => ({
             name: p.name,
             loginUrl: `${this.route}/${p.name}`,
-            supportedAuthenticationMethods: p.credProvider.getCredentials().map(cp => cp.get())
+            supportedAuthenticationMethods: p.credProvider.getCredentials().map(cp => cp.getFields())
         }));
-        console.log(integrations);
         return response.json(integrations);
     }
 

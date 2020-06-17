@@ -3,58 +3,9 @@ import { injectable } from "inversify";
 import { IWebServer } from "../webserver/IWebServer";
 import { IRequest, IResponse } from "../webserver/IWebRequest";
 import { workbook } from "../models/workbook";
-
-export interface ICredentials {
-    getFields(): any;
-    get(): any;
-}
-
-class passwordCredentials implements ICredentials {
-    public name!: string;
-    public password!: string;
-    getFields() {
-        return ["name", "password"];
-    }
-    get() {
-        return { name: this.name, password: this.password }
-    }
-
-}
-
-class patCredentials implements ICredentials {
-    public personalAccessTokenSecret!: string;
-    public personalAccessTokenName!: string
-    getFields() {
-        return ["personalAccessTokenSecret", "personalAccessTokenName"];
-    }
-    get() {
-        return {
-            personalAccessTokenName: this.personalAccessTokenName,
-            personalAccessTokenSecret: this.personalAccessTokenSecret
-        }
-    }
-}
-
-export interface ICredentialsProvider {
-    getCredentials(): ICredentials[];
-}
-
-class tableauCredentialsProvider implements ICredentialsProvider {
-    getCredentials(): ICredentials[] {
-        return [
-            new passwordCredentials(),
-            new patCredentials()
-        ]
-    }
-
-}
-
-export interface IIntegrationProvider {
-    name: string;
-    register(webServer: IWebServer, route: string): void;
-    import(): Promise<void>;
-    credProvider: ICredentialsProvider;
-}
+import { IIntegrationProvider } from "./integrationProvider";
+import { ICredentialsProvider, ICredentials, passwordCredentials, patCredentials } from "../credentials/credentialsProvider";
+import { tableauCredentialsProvider } from "../credentials/tableau";
 
 @injectable()
 export class tableauIntegration implements IIntegrationProvider {
@@ -79,6 +30,7 @@ export class tableauIntegration implements IIntegrationProvider {
         const creds = this.getCredentials(request.body);
         await this.connect(creds);
         await this.import();
+        response.json("OK");
     }
     getCredentials(body: any): ICredentials {
         if (body.name && body.password) {
