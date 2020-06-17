@@ -36,6 +36,18 @@ var workbookRepository = /** @class */ (function (_super) {
         return Promise.resolve(workbooks);
     };
     workbookRepository.prototype.findByString = function (query) {
+        var words = query.split(' ');
+        console.log("words", words);
+        var result = this.items.filter(function (item) {
+            for (var _i = 0, _a = Object.entries(item); _i < _a.length; _i++) {
+                var _b = _a[_i], key = _b[0], value = _b[1];
+                console.log("value", value);
+                if (words.indexOf(value) != -1) {
+                    return true;
+                }
+            }
+        });
+        return Promise.resolve(result);
     };
     workbookRepository = __decorate([
         inversify_1.injectable()

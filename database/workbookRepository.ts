@@ -14,6 +14,16 @@ export class workbookRepository extends memoryRepository<workbook> {
         return Promise.resolve(workbooks);
     }
     findByString(query: string) {
-
+        const words = query.split(' ');
+        console.log("words", words);
+        const result = this.items.filter(item => {
+            for (let [key, value] of Object.entries(item)) {
+                console.log("value", value);
+                if (words.indexOf(value) != -1) {
+                    return true;
+                }
+            }
+        });
+        return Promise.resolve(result);
     }
 }
