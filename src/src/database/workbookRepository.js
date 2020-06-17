@@ -30,6 +30,8 @@ var workbookRepository = /** @class */ (function (_super) {
         var _this = this;
         var isAllSuccsess = workbooks.map(function (workbook) { return _this.create(workbook); });
     };
+    workbookRepository.prototype.findByString = function (query) {
+    };
     workbookRepository = __decorate([
         inversify_1.injectable()
     ], workbookRepository);

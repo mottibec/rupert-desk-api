@@ -3,7 +3,7 @@ import pg from "knex";
 import config from "../config/config";
 
 export class postgresRepository<TEntity> implements IRepository<TEntity> {
-    private _knex: pg<any, unknown[]>;
+    protected _knex: pg<any, unknown[]>;
     constructor() {
         this._knex = pg({
             client: 'pg',
@@ -26,5 +26,8 @@ export class postgresRepository<TEntity> implements IRepository<TEntity> {
     }
     findById(id: string): TEntity | null {
         throw new Error("Method not implemented.");
+    }
+    getAll() {
+
     }
 }

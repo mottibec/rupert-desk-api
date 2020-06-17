@@ -1,4 +1,4 @@
-import IController from "./IController";
+import IController from "./controller";
 import { TYPES } from "../config/inversify.types";
 import { IWebServer } from "../webserver/IWebServer";
 import { inject, multiInject, injectable } from "inversify";

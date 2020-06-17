@@ -12,7 +12,8 @@ var authProvider_1 = require("../services/authProvider");
 var jwtService_1 = __importDefault(require("../services/jwtService"));
 var authService_1 = __importDefault(require("../services/authService"));
 var tableau_1 = require("../integrations/tableau");
-var integrationController_1 = __importDefault(require("../routes/integrationController"));
+var integration_1 = __importDefault(require("../routes/integration"));
+var workbook_1 = require("../routes/workbook");
 var container = new inversify_1.Container();
 exports.container = container;
 //web server
@@ -25,7 +26,7 @@ container.bind(inversify_types_1.TYPES.AuthService)
     .to(authService_1.default);
 container.bind(inversify_types_1.TYPES.JWTService)
     .to(jwtService_1.default);
-//
+//integrations
 container.bind(inversify_types_1.TYPES.IIntegrationProvider)
     .to(tableau_1.tableauIntegration);
 //auth providers
@@ -35,4 +36,6 @@ container.bind(inversify_types_1.TYPES.IAuthProvider)
 container.bind(inversify_types_1.TYPES.IController)
     .to(authentication_1.default);
 container.bind(inversify_types_1.TYPES.IController)
-    .to(integrationController_1.default);
+    .to(integration_1.default);
+container.bind(inversify_types_1.TYPES.IController)
+    .to(workbook_1.workbookController);

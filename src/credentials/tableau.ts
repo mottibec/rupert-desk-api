@@ -8,5 +8,4 @@ export class tableauCredentialsProvider implements ICredentialsProvider {
             new patCredentials()
         ]
     }
-
 }

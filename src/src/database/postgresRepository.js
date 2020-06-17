@@ -29,6 +29,8 @@ var postgresRepository = /** @class */ (function () {
     postgresRepository.prototype.findById = function (id) {
         throw new Error("Method not implemented.");
     };
+    postgresRepository.prototype.getAll = function () {
+    };
     return postgresRepository;
 }());
 exports.postgresRepository = postgresRepository;

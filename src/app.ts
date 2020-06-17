@@ -1,4 +1,4 @@
-import IController from "./routes/IController";
+import IController from "./routes/controller";
 import { IWebServer } from "./webserver/IWebServer";
 
 class App {

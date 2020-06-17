@@ -7,4 +7,7 @@ export class workbookRepository extends postgresRepository<workbook> {
     save(workbooks: workbook[]) {
         var isAllSuccsess = workbooks.map(workbook => this.create(workbook));
     }
+    findByString(query: string){
+       
+    }
 }

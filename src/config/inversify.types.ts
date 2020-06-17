@@ -4,6 +4,8 @@ const TYPES = {
     IAuthProvider: Symbol.for("IAuthProvider"),
     JWTService: Symbol.for("JWTService"),
     AuthService: Symbol.for("AuthService"),
-    IIntegrationProvider: Symbol.for("IIntegrationProvider")
+    IIntegrationProvider: Symbol.for("IIntegrationProvider"),
+    WorkbookService: Symbol.for("WorkbookService"),
+    WorkbookRepository: Symbol.for("WorkbookRepository")
 };
 export { TYPES };
