@@ -2,6 +2,7 @@ import { IRepository } from "./IRepository";
 import pg from "knex";
 import config from "../config/config";
 import { injectable } from "inversify";
+import { workbook } from "../models/workbook";
 
 @injectable()
 export class postgresRepository<TEntity> implements IRepository<TEntity> {
@@ -38,7 +39,8 @@ export class postgresRepository<TEntity> implements IRepository<TEntity> {
         const result = await this.knex("workbook").where(id).first();
         return result;
     }
-    getAll() {
-
+    async getAll() {
+        const workbooks = await this.knex<workbook>("workbook");
+        return workbooks;
     }
 }

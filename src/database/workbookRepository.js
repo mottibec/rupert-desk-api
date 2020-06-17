@@ -19,8 +19,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var postgresRepository_1 = require("./postgresRepository");
 var inversify_1 = require("inversify");
+var memoryRepository_1 = require("./memoryRepository");
 var workbookRepository = /** @class */ (function (_super) {
     __extends(workbookRepository, _super);
     function workbookRepository() {
@@ -30,11 +30,16 @@ var workbookRepository = /** @class */ (function (_super) {
         var _this = this;
         var isAllSuccsess = workbooks.map(function (workbook) { return _this.create(workbook); });
     };
+    workbookRepository.prototype.getAll = function () {
+        var workbooks = this.items;
+        console.log("workbooks", workbooks);
+        return Promise.resolve(workbooks);
+    };
     workbookRepository.prototype.findByString = function (query) {
     };
     workbookRepository = __decorate([
         inversify_1.injectable()
     ], workbookRepository);
     return workbookRepository;
-}(postgresRepository_1.postgresRepository));
+}(memoryRepository_1.memoryRepository));
 exports.workbookRepository = workbookRepository;

@@ -25,7 +25,8 @@ container.bind(inversify_types_1.TYPES.IWebServer)
     .inSingletonScope();
 //repo
 container.bind(inversify_types_1.TYPES.WorkbookRepository)
-    .to(workbookRepository_1.workbookRepository);
+    .to(workbookRepository_1.workbookRepository)
+    .inSingletonScope();
 //services
 container.bind(inversify_types_1.TYPES.passwordHashService)
     .to(passwordHashService_1.default);

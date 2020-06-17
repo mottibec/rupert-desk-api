@@ -31,6 +31,7 @@ export class workbookController implements IController {
     }
     async get(request: IRequest, response: IResponse) {
         const workbooks = await this._workbookService.getAll();
+        console.log("workbooks", workbooks);
         response.json(workbooks);
     }
     async find(request: IRequest, response: IResponse) {

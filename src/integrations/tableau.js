@@ -187,6 +187,9 @@ var tableauIntegration = /** @class */ (function () {
             });
         });
     };
+    tableauIntegration.prototype.getToken = function () {
+        return this._authToken;
+    };
     tableauIntegration.prototype.getDefaultConfig = function () {
         return {
             headers: {

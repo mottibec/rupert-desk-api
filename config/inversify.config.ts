@@ -25,7 +25,8 @@ container.bind<IWebServer>(TYPES.IWebServer)
 
 //repo
 container.bind<workbookRepository>(TYPES.WorkbookRepository)
-    .to(workbookRepository);
+    .to(workbookRepository)
+    .inSingletonScope();
 
 //services
 container.bind<passwordHashService>(TYPES.passwordHashService)

@@ -92,6 +92,7 @@ var workbookController = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this._workbookService.getAll()];
                     case 1:
                         workbooks = _a.sent();
+                        console.log("workbooks", workbooks);
                         response.json(workbooks);
                         return [2 /*return*/];
                 }

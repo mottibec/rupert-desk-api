@@ -80,18 +80,69 @@ var postgresRepository = /** @class */ (function () {
         });
     };
     postgresRepository.prototype.update = function (item) {
-        throw new Error("Method not implemented.");
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.knex("workbook").update(item)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result != 0];
+                }
+            });
+        });
     };
     postgresRepository.prototype.find = function (query) {
-        throw new Error("Method not implemented.");
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.knex("workbook").where(query)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                }
+            });
+        });
     };
     postgresRepository.prototype.findOne = function (query) {
-        throw new Error("Method not implemented.");
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.knex("workbook").first(query)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                }
+            });
+        });
     };
     postgresRepository.prototype.findById = function (id) {
-        throw new Error("Method not implemented.");
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.knex("workbook").where(id).first()];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                }
+            });
+        });
     };
     postgresRepository.prototype.getAll = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var workbooks;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.knex("workbook")];
+                    case 1:
+                        workbooks = _a.sent();
+                        return [2 /*return*/, workbooks];
+                }
+            });
+        });
     };
     postgresRepository = __decorate([
         inversify_1.injectable(),
