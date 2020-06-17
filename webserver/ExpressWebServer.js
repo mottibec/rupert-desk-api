@@ -18,16 +18,18 @@ var inversify_1 = require("inversify");
 var passport_1 = __importDefault(require("passport"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var jwtService_1 = __importDefault(require("../services/jwtService"));
-var inversify_types_1 = require("../config/inversify.types");
-var cors_1 = __importDefault(require("cors"));
+var inversify_types_1 = require("../inversify.types");
+var path_1 = __importDefault(require("path"));
 var ExpressWebServer = /** @class */ (function () {
     function ExpressWebServer() {
         this._app = express_2.default();
+        this._router = express_1.Router();
         this._app.use(body_parser_1.default.urlencoded({ extended: false }));
         this._app.use(body_parser_1.default.json());
         this._app.use(passport_1.default.initialize());
-        this._app.use(cors_1.default());
-        this._router = express_1.Router();
+        this._app.set("views", path_1.default.join(path_1.default.dirname(__dirname), "views"));
+        this._app.set("view engine", "ejs");
+        this._app.use(express_2.default.static(path_1.default.join(path_1.default.dirname(__dirname), 'public')));
     }
     ExpressWebServer.prototype.start = function (port, callback) {
         this._app.use('/', this._router);
@@ -50,18 +52,14 @@ var ExpressWebServer = /** @class */ (function () {
         });
     };
     ExpressWebServer.prototype.registerProtectedPost = function (routeTemplate, callback) {
-        this._router.post(routeTemplate, this._jwtService.verifyToken(), function (request, response, next) {
-            return callback(request, response, next);
-        });
-    };
-    ExpressWebServer.prototype.registerProtectedPut = function (routeTemplate, callback) {
-        this._router.put(routeTemplate, this._jwtService.verifyToken(), function (request, response, next) {
-            return callback(request, response, next);
+        this._router.get(routeTemplate, this._jwtService.verifyToken(), function (request, response) {
+            return callback(request, response);
         });
     };
     ExpressWebServer.prototype.handleError = function (err, req, res, next) {
+        console.log("err", err);
         res.status(500);
-        res.send({ error: err });
+        res.render('error', { error: err });
     };
     __decorate([
         inversify_1.inject(inversify_types_1.TYPES.JWTService),

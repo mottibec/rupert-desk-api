@@ -58,6 +58,5 @@ export class LocalAuthProvider implements IAuthProvider {
             return callback(null, false, "invalid user name or password");
         }
         return callback(null, { email: user.email, name: user.name });
-
     }
 }
