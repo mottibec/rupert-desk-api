@@ -3,8 +3,8 @@ const TYPES = {
     IController: Symbol.for("IController"),
     IAuthProvider: Symbol.for("IAuthProvider"),
     JWTService: Symbol.for("JWTService"),
-    AuthService: Symbol.for("AuthService"),
-    UserService: Symbol.for("UserService"),
+    passwordHashService: Symbol.for("passwordHashService"),
+    userService: Symbol.for("userService"),
     IIntegrationProvider: Symbol.for("IIntegrationProvider"),
     WorkbookService: Symbol.for("WorkbookService"),
     WorkbookRepository: Symbol.for("WorkbookRepository")

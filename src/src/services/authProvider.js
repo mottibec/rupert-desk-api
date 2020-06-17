@@ -101,7 +101,7 @@ var LocalAuthProvider = /** @class */ (function () {
                         if (!user) {
                             return [2 /*return*/, callback(null, false, "invalid user name or password")];
                         }
-                        return [4 /*yield*/, this._passwordHash.verifyHash(password, user.password || "")];
+                        return [4 /*yield*/, this._passwordHash.verifyHash(password, user.hashedPassword || "")];
                     case 2:
                         doseMatch = _a.sent();
                         if (!doseMatch) {
@@ -117,11 +117,11 @@ var LocalAuthProvider = /** @class */ (function () {
         __metadata("design:type", jwtService_1.default)
     ], LocalAuthProvider.prototype, "_jwtService", void 0);
     __decorate([
-        inversify_1.inject(inversify_types_1.TYPES.UserService),
+        inversify_1.inject(inversify_types_1.TYPES.userService),
         __metadata("design:type", userService_1.userService)
     ], LocalAuthProvider.prototype, "_userService", void 0);
     __decorate([
-        inversify_1.inject(inversify_types_1.TYPES.AuthService),
+        inversify_1.inject(inversify_types_1.TYPES.passwordHashService),
         __metadata("design:type", passwordHashService_1.default)
     ], LocalAuthProvider.prototype, "_passwordHash", void 0);
     LocalAuthProvider = __decorate([

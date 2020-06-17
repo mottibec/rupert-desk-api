@@ -128,11 +128,11 @@ var authenticationController = /** @class */ (function () {
         __metadata("design:type", jwtService_1.default)
     ], authenticationController.prototype, "_tokenService", void 0);
     __decorate([
-        inversify_1.inject(inversify_types_1.TYPES.AuthService),
+        inversify_1.inject(inversify_types_1.TYPES.passwordHashService),
         __metadata("design:type", passwordHashService_1.default)
     ], authenticationController.prototype, "_passwordHash", void 0);
     __decorate([
-        inversify_1.inject(inversify_types_1.TYPES.AuthService),
+        inversify_1.inject(inversify_types_1.TYPES.userService),
         __metadata("design:type", userService_1.userService)
     ], authenticationController.prototype, "_userService", void 0);
     authenticationController = __decorate([

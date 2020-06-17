@@ -21,10 +21,10 @@ export default class authenticationController implements IController {
     @inject(TYPES.JWTService)
     private _tokenService!: JWTService;
 
-    @inject(TYPES.AuthService)
+    @inject(TYPES.passwordHashService)
     private _passwordHash!: passwordHashService;
 
-    @inject(TYPES.AuthService)
+    @inject(TYPES.userService)
     private _userService!: userService;
 
     initRoutes(): void {

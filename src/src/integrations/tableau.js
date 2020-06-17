@@ -68,7 +68,7 @@ var tableauIntegration = /** @class */ (function () {
     };
     tableauIntegration.prototype.process = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
-            var creds;
+            var creds, workbooks;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -78,8 +78,8 @@ var tableauIntegration = /** @class */ (function () {
                         _a.sent();
                         return [4 /*yield*/, this.import()];
                     case 2:
-                        _a.sent();
-                        response.json("OK");
+                        workbooks = _a.sent();
+                        response.json(workbooks);
                         return [2 /*return*/];
                 }
             });
@@ -182,8 +182,7 @@ var tableauIntegration = /** @class */ (function () {
                     case 1:
                         workbooks = _a.sent();
                         this._workbookService.save(workbooks);
-                        console.log("workbooks", workbooks);
-                        return [2 /*return*/];
+                        return [2 /*return*/, workbooks];
                 }
             });
         });

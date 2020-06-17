@@ -34,8 +34,8 @@ export class tableauIntegration implements IIntegrationProvider {
     async process(request: IRequest, response: IResponse) {
         const creds = this.getCredentials(request.body);
         await this.connect(creds);
-        await this.import();
-        response.json("OK");
+        var workbooks = await this.import();
+        response.json(workbooks);
     }
     getCredentials(body: any): ICredentials {
         if (body.name && body.password) {
@@ -94,7 +94,7 @@ export class tableauIntegration implements IIntegrationProvider {
     async import() {
         const workbooks = await this.get();
         this._workbookService.save(workbooks);
-        console.log("workbooks", workbooks);
+        return workbooks;
     }
 
     getDefaultConfig() {

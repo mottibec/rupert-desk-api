@@ -7,11 +7,13 @@ import IController from "../routes/controller";
 import authenticationController from "../routes/authentication";
 import { IAuthProvider, LocalAuthProvider } from "../services/authProvider";
 import JWTService from "../services/jwtService";
-import AuthService from "../services/passwordHashService";
 import { tableauIntegration } from "../integrations/tableau";
 import integrationController from "../routes/integration";
 import { workbookController } from "../routes/workbook";
 import workbookService from "../services/workbookService";
+import passwordHashService from "../services/passwordHashService";
+import { userService } from "../services/userService";
+import { workbookRepository } from "../database/workbookRepository";
 
 
 const container = new Container();
@@ -22,14 +24,18 @@ container.bind<IWebServer>(TYPES.IWebServer)
     .inSingletonScope();
 
 //repo
+container.bind<workbookRepository>(TYPES.WorkbookRepository)
+    .to(workbookRepository);
 
 //services
-container.bind<AuthService>(TYPES.AuthService)
-    .to(AuthService);
+container.bind<passwordHashService>(TYPES.passwordHashService)
+    .to(passwordHashService);
 container.bind<JWTService>(TYPES.JWTService)
     .to(JWTService);
 container.bind<workbookService>(TYPES.WorkbookService)
     .to(workbookService);
+container.bind<userService>(TYPES.userService)
+    .to(userService);
 
 //integrations
 container.bind<tableauIntegration>(TYPES.IIntegrationProvider)

@@ -18,10 +18,10 @@ export class LocalAuthProvider implements IAuthProvider {
     @inject(TYPES.JWTService)
     private _jwtService!: JWTService;
 
-    @inject(TYPES.UserService)
+    @inject(TYPES.userService)
     private _userService!: userService;
 
-    @inject(TYPES.AuthService)
+    @inject(TYPES.passwordHashService)
     private _passwordHash!: passwordHashService;
 
     register(webServer: IWebServer, route: string): void {

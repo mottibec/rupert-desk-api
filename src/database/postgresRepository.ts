@@ -1,19 +1,26 @@
 import { IRepository } from "./IRepository";
 import pg from "knex";
 import config from "../config/config";
+import { injectable } from "inversify";
 
+@injectable()
 export class postgresRepository<TEntity> implements IRepository<TEntity> {
-    protected _knex: pg<any, unknown[]>;
+    protected knex: pg<any, unknown[]>;
     constructor() {
-        this._knex = pg({
+        this.knex = pg({
             client: 'pg',
             connection: config.databaseConnectionString,
             searchPath: ['knex', 'public'],
         });
     }
     create(item: TEntity): boolean {
-        const result = this._knex("table").insert(item);
-        return result != null;
+        try {
+            const result = this.knex("workbook").insert(item);
+            return result != null;
+        } catch (error) {
+            console.log("error", error);
+            return false;
+        }
     }
     update(item: TEntity): boolean {
         throw new Error("Method not implemented.");
