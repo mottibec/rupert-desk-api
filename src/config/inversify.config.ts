@@ -27,7 +27,7 @@ container.bind<AuthService>(TYPES.AuthService)
 container.bind<JWTService>(TYPES.JWTService)
     .to(JWTService);
 
-//
+//integrations
 container.bind<tableauIntegration>(TYPES.IIntegrationProvider)
 .to(tableauIntegration);
 
