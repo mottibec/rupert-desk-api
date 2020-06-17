@@ -13,26 +13,30 @@ export class postgresRepository<TEntity> implements IRepository<TEntity> {
             searchPath: ['knex', 'public'],
         });
     }
-    create(item: TEntity): boolean {
+    async create(item: TEntity): Promise<boolean> {
         try {
-            const result = this.knex("workbook").insert(item);
+            const result = await this.knex("workbook").insert(item);
             return result != null;
         } catch (error) {
             console.log("error", error);
             return false;
         }
     }
-    update(item: TEntity): boolean {
-        throw new Error("Method not implemented.");
+    async update(item: TEntity): Promise<boolean> {
+        const result = await this.knex("workbook").update(item);
+        return result != 0;
     }
-    find(query: any): TEntity[] {
-        throw new Error("Method not implemented.");
+    async find(query: any): Promise<TEntity[]> {
+        const result = await this.knex("workbook").where(query);
+        return result;
     }
-    findOne(query: any): TEntity | null {
-        throw new Error("Method not implemented.");
+    async findOne(query: any): Promise<TEntity | null> {
+        const result = await this.knex("workbook").first(query);
+        return result;
     }
-    findById(id: string): TEntity | null {
-        throw new Error("Method not implemented.");
+    async findById(id: string): Promise<TEntity | null> {
+        const result = await this.knex("workbook").where(id).first();
+        return result;
     }
     getAll() {
 
