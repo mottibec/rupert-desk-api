@@ -7,7 +7,7 @@ import IController from "../routes/controller";
 import authenticationController from "../routes/authentication";
 import { IAuthProvider, LocalAuthProvider } from "../services/authProvider";
 import JWTService from "../services/jwtService";
-import AuthService from "../services/authService";
+import AuthService from "../services/passwordHashService";
 import { tableauIntegration } from "../integrations/tableau";
 import integrationController from "../routes/integration";
 import { workbookController } from "../routes/workbook";

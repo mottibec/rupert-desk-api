@@ -7,7 +7,8 @@
     "tsc": "tsc",
     "build": "npm run tsc",
     "serve": "node src/server.js",
-    "start": "npm run build && npm run serve"
+    "start": "npm run build && npm run serve",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -59,6 +60,14 @@
   },
   "snyk": true,
   "devDependencies": {
+    "@types/jest": "^26.0.0",
     "jest": "^26.0.1"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "keywords": [
+    "repert",
+    "api"
+  ]
 }

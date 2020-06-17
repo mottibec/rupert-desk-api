@@ -5,7 +5,8 @@ import { inject, multiInject, injectable } from "inversify";
 import { IAuthProvider } from "../services/authProvider";
 import { IRequest, IResponse } from "../webserver/IWebRequest";
 import JWTService from "../services/jwtService";
-import AuthService from "../services/authService";
+import { userService } from "../services/userService";
+import passwordHashService from "../services/passwordHashService";
 
 @injectable()
 export default class authenticationController implements IController {
@@ -21,9 +22,10 @@ export default class authenticationController implements IController {
     private _tokenService!: JWTService;
 
     @inject(TYPES.AuthService)
-    private _authService!: AuthService;
+    private _passwordHash!: passwordHashService;
 
-    private _accountService!: any;
+    @inject(TYPES.AuthService)
+    private _userService!: userService;
 
     initRoutes(): void {
         this._providers.forEach(provider => provider.register(this._webServer, this.route));
@@ -32,7 +34,7 @@ export default class authenticationController implements IController {
     }
     async signUp(request: IRequest, response: IResponse) {
         const signUpData = request.body;
-        const savedUser = await this._accountService.findByEmail(signUpData.email);
+        const savedUser = await this._userService.findByEmail(signUpData.email);
         if (savedUser) {
             return response
                 .status(400)
@@ -41,19 +43,19 @@ export default class authenticationController implements IController {
                 });
         }
 
-        let { user, account } = await this.createUser(signUpData);
-        const accountResult = await this._accountService.createAccount(account);
-        if (accountResult) {
-            var token = this._tokenService.sign({ email: account.email });
+        let user = await this.createUser(signUpData);
+        const userResult = await this._userService.createUser(user);
+        if (userResult) {
+            var token = this._tokenService.sign({ email: user.email });
             response.send({ access_token: token, username: user.name });
         }
         response.status(400);
     }
     async createUser(signUpData: any): Promise<any> {
-        const account = {
+        const user = {
             password: ""
         };
-        account.password = await this._authService.hash(signUpData.password);
-        return account;
+        user.password = await this._passwordHash.hash(signUpData.password);
+        return user;
     }
 }

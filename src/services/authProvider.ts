@@ -1,12 +1,11 @@
 import { IWebServer } from "../webserver/IWebServer";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import config from "../config/config";
 import { injectable, inject } from "inversify";
-import { IRequest, IResponse } from "../webserver/IWebRequest";
 import JWTService from "./jwtService";
 import { TYPES } from "../config/inversify.types";
-import AuthService from "./authService";
+import passwordHashService from "./passwordHashService";
+import { userService } from "./userService";
 
 export interface IAuthProvider {
     register(webServer: IWebServer, route: string): void;
@@ -19,10 +18,11 @@ export class LocalAuthProvider implements IAuthProvider {
     @inject(TYPES.JWTService)
     private _jwtService!: JWTService;
 
-    private _accountService!: any;
+    @inject(TYPES.UserService)
+    private _userService!: userService;
 
     @inject(TYPES.AuthService)
-    private _authService!: AuthService;
+    private _passwordHash!: passwordHashService;
 
     register(webServer: IWebServer, route: string): void {
         passport.use(new LocalStrategy({
@@ -49,15 +49,15 @@ export class LocalAuthProvider implements IAuthProvider {
         this._jwtService.register();
     }
     async verifyAccount(userName: string, password: string, callback: Function) {
-        const account = await this._accountService.findByEmail(userName);
-        if (!account) {
+        const user = await this._userService.findByEmail(userName);
+        if (!user) {
             return callback(null, false, "invalid user name or password");
         }
-        const doseMatch = await this._authService.verifyHash(password, account.password || "");
+        const doseMatch = await this._passwordHash.verifyHash(password, user.password || "");
         if (!doseMatch) {
             return callback(null, false, "invalid user name or password");
         }
-        return callback(null, { email: account.email, name: account.name });
+        return callback(null, { email: user.email, name: user.name });
 
     }
 }
