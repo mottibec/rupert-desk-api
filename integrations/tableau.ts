@@ -96,7 +96,9 @@ export class tableauIntegration implements IIntegrationProvider {
         this._workbookService.save(workbooks);
         return workbooks;
     }
-
+    getToken() {
+        return this._authToken;
+    }
     getDefaultConfig() {
         return {
             headers: {
