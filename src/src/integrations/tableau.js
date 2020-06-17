@@ -52,6 +52,8 @@ var axios_1 = __importDefault(require("axios"));
 var inversify_1 = require("inversify");
 var credentialsProvider_1 = require("../credentials/credentialsProvider");
 var tableau_1 = require("../credentials/tableau");
+var workbookService_1 = __importDefault(require("../services/workbookService"));
+var inversify_types_1 = require("../config/inversify.types");
 var tableauIntegration = /** @class */ (function () {
     function tableauIntegration() {
         this.credProvider = new tableau_1.tableauCredentialsProvider();
@@ -179,6 +181,7 @@ var tableauIntegration = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.get()];
                     case 1:
                         workbooks = _a.sent();
+                        this._workbookService.save(workbooks);
                         console.log("workbooks", workbooks);
                         return [2 /*return*/];
                 }
@@ -193,6 +196,10 @@ var tableauIntegration = /** @class */ (function () {
             }
         };
     };
+    __decorate([
+        inversify_1.inject(inversify_types_1.TYPES.WorkbookService),
+        __metadata("design:type", workbookService_1.default)
+    ], tableauIntegration.prototype, "_workbookService", void 0);
     tableauIntegration = __decorate([
         inversify_1.injectable(),
         __metadata("design:paramtypes", [])

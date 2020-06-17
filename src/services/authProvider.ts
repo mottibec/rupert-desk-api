@@ -53,7 +53,7 @@ export class LocalAuthProvider implements IAuthProvider {
         if (!user) {
             return callback(null, false, "invalid user name or password");
         }
-        const doseMatch = await this._passwordHash.verifyHash(password, user.password || "");
+        const doseMatch = await this._passwordHash.verifyHash(password, user.hashedPassword || "");
         if (!doseMatch) {
             return callback(null, false, "invalid user name or password");
         }

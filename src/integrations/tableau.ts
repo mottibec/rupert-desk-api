@@ -1,11 +1,13 @@
 import axios from "axios";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 import { IWebServer } from "../webserver/IWebServer";
 import { IRequest, IResponse } from "../webserver/IWebRequest";
 import { workbook } from "../models/workbook";
 import { IIntegrationProvider } from "./integrationProvider";
 import { ICredentialsProvider, ICredentials, passwordCredentials, patCredentials } from "../credentials/credentialsProvider";
 import { tableauCredentialsProvider } from "../credentials/tableau";
+import workbookService from "../services/workbookService";
+import { TYPES } from "../config/inversify.types";
 
 @injectable()
 export class tableauIntegration implements IIntegrationProvider {
@@ -14,6 +16,9 @@ export class tableauIntegration implements IIntegrationProvider {
     private _baseUrl: string;
     private _authToken!: string;
     private _siteId!: string;
+
+    @inject(TYPES.WorkbookService)
+    private _workbookService!: workbookService;
 
     constructor() {
         this.credProvider = new tableauCredentialsProvider();
@@ -88,6 +93,7 @@ export class tableauIntegration implements IIntegrationProvider {
 
     async import() {
         const workbooks = await this.get();
+        this._workbookService.save(workbooks);
         console.log("workbooks", workbooks);
     }
 

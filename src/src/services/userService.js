@@ -5,39 +5,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var UserRepository_1 = require("../database/UserRepository");
-var inversify_types_1 = require("../config/inversify.types");
 var inversify_1 = require("inversify");
-var UserService = /** @class */ (function () {
-    function UserService() {
+var user_1 = require("../models/user");
+var userService = /** @class */ (function () {
+    function userService() {
     }
-    UserService.prototype.findByEmail = function (email) {
-        return this._userRepository.findOne({ 'email': email });
+    userService.prototype.findByEmail = function (email) {
+        return new user_1.user();
     };
-    UserService.prototype.getUser = function (id) {
-        return this._userRepository.findOne({ 'id': id });
+    userService.prototype.createUser = function (user) {
+        return true;
     };
-    UserService.prototype.createUser = function (user) {
-        return this._userRepository.create(user);
-    };
-    UserService.prototype.getAllUsers = function () {
-        return this._userRepository.find({});
-    };
-    UserService.prototype.update = function (user) {
-        return this._userRepository.update(user);
-    };
-    var _a;
-    __decorate([
-        inversify_1.inject(inversify_types_1.TYPES.UserRepository),
-        __metadata("design:type", typeof (_a = typeof UserRepository_1.UserRepository !== "undefined" && UserRepository_1.UserRepository) === "function" ? _a : Object)
-    ], UserService.prototype, "_userRepository", void 0);
-    UserService = __decorate([
+    userService = __decorate([
         inversify_1.injectable()
-    ], UserService);
-    return UserService;
+    ], userService);
+    return userService;
 }());
-exports.UserService = UserService;
+exports.userService = userService;

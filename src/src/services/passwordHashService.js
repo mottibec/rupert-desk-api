@@ -5,9 +5,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -48,83 +45,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var bcrypt_1 = __importDefault(require("bcrypt"));
 var inversify_1 = require("inversify");
-var inversify_types_1 = require("../config/inversify.types");
-var workbookService_1 = __importDefault(require("../services/workbookService"));
-var workbookController = /** @class */ (function () {
-    function workbookController() {
-        this.route = "/workbook";
+var passwordHashService = /** @class */ (function () {
+    function passwordHashService() {
     }
-    workbookController.prototype.initRoutes = function () {
-        var _this = this;
-        this._webServer.registerGet(this.route, function (request, response) {
-            return _this.get(request, response);
-        });
-        this._webServer.registerGet(this.route + "/:id", function (request, response) {
-            return _this.getById(request, response);
-        });
-        this._webServer.registerPost(this.route + "/query", function (request, response) {
-            return _this.find(request, response);
-        });
-    };
-    workbookController.prototype.getById = function (request, response) {
+    passwordHashService.prototype.hash = function (str) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, workbooks;
+            var salt;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log(request.params);
-                        id = request.params.id;
-                        return [4 /*yield*/, this._workbookService.get(id)];
+                    case 0: return [4 /*yield*/, bcrypt_1.default.genSalt(10)];
                     case 1:
-                        workbooks = _a.sent();
-                        response.json(workbooks);
-                        return [2 /*return*/];
+                        salt = _a.sent();
+                        return [4 /*yield*/, bcrypt_1.default.hash(str, salt)];
+                    case 2: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    workbookController.prototype.get = function (request, response) {
+    passwordHashService.prototype.verifyHash = function (str, hash) {
         return __awaiter(this, void 0, void 0, function () {
-            var workbooks;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this._workbookService.getAll()];
-                    case 1:
-                        workbooks = _a.sent();
-                        response.json(workbooks);
-                        return [2 /*return*/];
+                    case 0: return [4 /*yield*/, bcrypt_1.default.compare(str, hash)];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    workbookController.prototype.find = function (request, response) {
-        return __awaiter(this, void 0, void 0, function () {
-            var query, workbooks;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        query = request.body.query;
-                        return [4 /*yield*/, this._workbookService.search(query)];
-                    case 1:
-                        workbooks = _a.sent();
-                        response.json(workbooks);
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    __decorate([
-        inversify_1.inject(inversify_types_1.TYPES.IWebServer),
-        __metadata("design:type", Object)
-    ], workbookController.prototype, "_webServer", void 0);
-    __decorate([
-        inversify_1.inject(inversify_types_1.TYPES.WorkbookService),
-        __metadata("design:type", workbookService_1.default)
-    ], workbookController.prototype, "_workbookService", void 0);
-    workbookController = __decorate([
+    passwordHashService = __decorate([
         inversify_1.injectable()
-    ], workbookController);
-    return workbookController;
+    ], passwordHashService);
+    return passwordHashService;
 }());
-exports.workbookController = workbookController;
+exports.default = passwordHashService;

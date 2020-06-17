@@ -51,7 +51,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var inversify_types_1 = require("../config/inversify.types");
 var inversify_1 = require("inversify");
 var jwtService_1 = __importDefault(require("../services/jwtService"));
-var authService_1 = __importDefault(require("../services/authService"));
+var userService_1 = require("../services/userService");
+var passwordHashService_1 = __importDefault(require("../services/passwordHashService"));
 var authenticationController = /** @class */ (function () {
     function authenticationController() {
         this.route = "/auth";
@@ -65,14 +66,14 @@ var authenticationController = /** @class */ (function () {
     };
     authenticationController.prototype.signUp = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
-            var signUpData, savedUser, _a, user, account, accountResult, token;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var signUpData, savedUser, user, userResult, token;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         signUpData = request.body;
-                        return [4 /*yield*/, this._accountService.findByEmail(signUpData.email)];
+                        return [4 /*yield*/, this._userService.findByEmail(signUpData.email)];
                     case 1:
-                        savedUser = _b.sent();
+                        savedUser = _a.sent();
                         if (savedUser) {
                             return [2 /*return*/, response
                                     .status(400)
@@ -82,12 +83,12 @@ var authenticationController = /** @class */ (function () {
                         }
                         return [4 /*yield*/, this.createUser(signUpData)];
                     case 2:
-                        _a = _b.sent(), user = _a.user, account = _a.account;
-                        return [4 /*yield*/, this._accountService.createAccount(account)];
+                        user = _a.sent();
+                        return [4 /*yield*/, this._userService.createUser(user)];
                     case 3:
-                        accountResult = _b.sent();
-                        if (accountResult) {
-                            token = this._tokenService.sign({ email: account.email });
+                        userResult = _a.sent();
+                        if (userResult) {
+                            token = this._tokenService.sign({ email: user.email });
                             response.send({ access_token: token, username: user.name });
                         }
                         response.status(400);
@@ -98,18 +99,18 @@ var authenticationController = /** @class */ (function () {
     };
     authenticationController.prototype.createUser = function (signUpData) {
         return __awaiter(this, void 0, void 0, function () {
-            var account, _a;
+            var user, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        account = {
+                        user = {
                             password: ""
                         };
-                        _a = account;
-                        return [4 /*yield*/, this._authService.hash(signUpData.password)];
+                        _a = user;
+                        return [4 /*yield*/, this._passwordHash.hash(signUpData.password)];
                     case 1:
                         _a.password = _b.sent();
-                        return [2 /*return*/, account];
+                        return [2 /*return*/, user];
                 }
             });
         });
@@ -128,8 +129,12 @@ var authenticationController = /** @class */ (function () {
     ], authenticationController.prototype, "_tokenService", void 0);
     __decorate([
         inversify_1.inject(inversify_types_1.TYPES.AuthService),
-        __metadata("design:type", authService_1.default)
-    ], authenticationController.prototype, "_authService", void 0);
+        __metadata("design:type", passwordHashService_1.default)
+    ], authenticationController.prototype, "_passwordHash", void 0);
+    __decorate([
+        inversify_1.inject(inversify_types_1.TYPES.AuthService),
+        __metadata("design:type", userService_1.userService)
+    ], authenticationController.prototype, "_userService", void 0);
     authenticationController = __decorate([
         inversify_1.injectable()
     ], authenticationController);

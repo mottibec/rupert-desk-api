@@ -53,7 +53,8 @@ var passport_local_1 = require("passport-local");
 var inversify_1 = require("inversify");
 var jwtService_1 = __importDefault(require("./jwtService"));
 var inversify_types_1 = require("../config/inversify.types");
-var authService_1 = __importDefault(require("./authService"));
+var passwordHashService_1 = __importDefault(require("./passwordHashService"));
+var userService_1 = require("./userService");
 var LocalAuthProvider = /** @class */ (function () {
     function LocalAuthProvider() {
     }
@@ -91,22 +92,22 @@ var LocalAuthProvider = /** @class */ (function () {
     };
     LocalAuthProvider.prototype.verifyAccount = function (userName, password, callback) {
         return __awaiter(this, void 0, void 0, function () {
-            var account, doseMatch;
+            var user, doseMatch;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this._accountService.findByEmail(userName)];
+                    case 0: return [4 /*yield*/, this._userService.findByEmail(userName)];
                     case 1:
-                        account = _a.sent();
-                        if (!account) {
+                        user = _a.sent();
+                        if (!user) {
                             return [2 /*return*/, callback(null, false, "invalid user name or password")];
                         }
-                        return [4 /*yield*/, this._authService.verifyHash(password, account.password || "")];
+                        return [4 /*yield*/, this._passwordHash.verifyHash(password, user.password || "")];
                     case 2:
                         doseMatch = _a.sent();
                         if (!doseMatch) {
                             return [2 /*return*/, callback(null, false, "invalid user name or password")];
                         }
-                        return [2 /*return*/, callback(null, { email: account.email, name: account.name })];
+                        return [2 /*return*/, callback(null, { email: user.email, name: user.name })];
                 }
             });
         });
@@ -116,9 +117,13 @@ var LocalAuthProvider = /** @class */ (function () {
         __metadata("design:type", jwtService_1.default)
     ], LocalAuthProvider.prototype, "_jwtService", void 0);
     __decorate([
+        inversify_1.inject(inversify_types_1.TYPES.UserService),
+        __metadata("design:type", userService_1.userService)
+    ], LocalAuthProvider.prototype, "_userService", void 0);
+    __decorate([
         inversify_1.inject(inversify_types_1.TYPES.AuthService),
-        __metadata("design:type", authService_1.default)
-    ], LocalAuthProvider.prototype, "_authService", void 0);
+        __metadata("design:type", passwordHashService_1.default)
+    ], LocalAuthProvider.prototype, "_passwordHash", void 0);
     LocalAuthProvider = __decorate([
         inversify_1.injectable()
     ], LocalAuthProvider);

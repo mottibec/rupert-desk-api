@@ -6,7 +6,9 @@ var TYPES = {
     IAuthProvider: Symbol.for("IAuthProvider"),
     JWTService: Symbol.for("JWTService"),
     AuthService: Symbol.for("AuthService"),
+    UserService: Symbol.for("UserService"),
     IIntegrationProvider: Symbol.for("IIntegrationProvider"),
+    WorkbookService: Symbol.for("WorkbookService"),
     WorkbookRepository: Symbol.for("WorkbookRepository")
 };
 exports.TYPES = TYPES;

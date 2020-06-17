@@ -10,10 +10,11 @@ var ExpressWebServer_1 = __importDefault(require("../webserver/ExpressWebServer"
 var authentication_1 = __importDefault(require("../routes/authentication"));
 var authProvider_1 = require("../services/authProvider");
 var jwtService_1 = __importDefault(require("../services/jwtService"));
-var authService_1 = __importDefault(require("../services/authService"));
+var passwordHashService_1 = __importDefault(require("../services/passwordHashService"));
 var tableau_1 = require("../integrations/tableau");
 var integration_1 = __importDefault(require("../routes/integration"));
 var workbook_1 = require("../routes/workbook");
+var workbookService_1 = __importDefault(require("../services/workbookService"));
 var container = new inversify_1.Container();
 exports.container = container;
 //web server
@@ -23,9 +24,11 @@ container.bind(inversify_types_1.TYPES.IWebServer)
 //repo
 //services
 container.bind(inversify_types_1.TYPES.AuthService)
-    .to(authService_1.default);
+    .to(passwordHashService_1.default);
 container.bind(inversify_types_1.TYPES.JWTService)
     .to(jwtService_1.default);
+container.bind(inversify_types_1.TYPES.WorkbookService)
+    .to(workbookService_1.default);
 //integrations
 container.bind(inversify_types_1.TYPES.IIntegrationProvider)
     .to(tableau_1.tableauIntegration);
