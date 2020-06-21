@@ -4,23 +4,18 @@ import { injectable } from "inversify";
 import { memoryRepository } from "./memoryRepository";
 
 @injectable()
-export class workbookRepository extends memoryRepository<workbook> {
+export class workbookRepository extends postgresRepository<workbook> {
     save(workbooks: workbook[]) {
         var isAllSuccsess = workbooks.map(workbook => this.create(workbook));
     }
-    getAll() {
-        const workbooks = this.items;
-        return Promise.resolve(workbooks);
-    }
-    findByString(query: string) {
-        const words = query.split(' ');
-        const result = this.items.filter(item => {
-            for (let [key, value] of Object.entries(item)) {
-                if (words.indexOf(value) != -1) {
-                    return true;
-                }
-            }
-        });
-        return Promise.resolve(result);
+    async findByString(query: string) {
+        console.log("query", query);
+        try {
+            const workbooks = await this.knex();
+            console.log("workbooks", workbooks);
+            return workbooks;
+        } catch (error) {
+            console.error(error);
+        }
     }
 }

@@ -83,7 +83,7 @@ export class tableauIntegration implements IIntegrationProvider {
     async get(): Promise<workbook[]> {
         const url = `${this._baseUrl}/api/3.8/sites/${this._siteId}/workbooks`;
         var response = await axios.get(url, this.getDefaultConfig());
-        return response.data.workbooks.workbook.map((w: any) => w as workbook);
+        return response.data.workbooks.workbook.map((w: any) => new workbook(w.id, w.name, w.contentUrl, w.webpageUrl));
     }
 
     async getById(workbookId: string) {
