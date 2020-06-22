@@ -2,16 +2,17 @@ import { IRepository } from "./IRepository";
 import pg from "knex";
 import { injectable, inject } from "inversify";
 import { databaseManager } from "./databaseManager";
+import entity from "../models/entity";
 
 @injectable()
-export class postgresRepository<TEntity> implements IRepository<TEntity> {
+export class postgresRepository<TEntity extends entity> implements IRepository<TEntity> {
     protected knex: pg<any, unknown[]>;
     constructor(dbManager: databaseManager) {
         this.knex = dbManager.getConnection();
     }
     async create(item: TEntity): Promise<boolean> {
         try {
-            const result = await this.knex("workbooks").insert(item);
+            const result = await this.knex(item.entityName).insert(item);
             return result != null;
         } catch (error) {
             console.log("error", error);
@@ -19,7 +20,7 @@ export class postgresRepository<TEntity> implements IRepository<TEntity> {
         }
     }
     async update(item: TEntity): Promise<boolean> {
-        const result = await this.knex("workbooks").update(item);
+        const result = await this.knex(item.entityName).update(item);
         return result != 0;
     }
     async find(query: any): Promise<TEntity[]> {
