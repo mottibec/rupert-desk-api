@@ -18,6 +18,7 @@ export class databaseManager {
     async initilize() {
         await this.createWoorkbooks();
         await this.createViews();
+        await this.createUsers();
     }
     async createWoorkbooks() {
         await this._knex.schema.createTable("workbooks", table => {
@@ -33,6 +34,14 @@ export class databaseManager {
             table.string("name");
             table.string("url");
             table.json("tags")
+        });
+    }
+    async createUsers() {
+        await this._knex.schema.createTable("users", table => {
+            table.increments("id");
+            table.string("name");
+            table.string("email");
+            table.json("hashedPassword")
         });
     }
 }

@@ -8,6 +8,7 @@ const TYPES = {
     IIntegrationProvider: Symbol.for("IIntegrationProvider"),
     WorkbookService: Symbol.for("WorkbookService"),
     WorkbookRepository: Symbol.for("WorkbookRepository"),
+    userRepository: Symbol.for("userRepository"),
     databaseManager: Symbol.for("databaseManager")
 };
 export { TYPES };
