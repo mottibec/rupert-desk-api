@@ -16,11 +16,13 @@ export class workbookController implements IController {
     private _workbookService!: workbookService;
 
     initRoutes(): void {
-        this._webServer.registerGet(this.route, (request: IRequest, response: IResponse) =>
+        this._webServer.registerProtectedGet(this.route, (request: IRequest, response: IResponse) =>
             this.get(request, response));
-        this._webServer.registerGet(`${this.route}/:id`, (request: IRequest, response: IResponse) =>
+
+        this._webServer.registerProtectedGet(`${this.route}/:id`, (request: IRequest, response: IResponse) =>
             this.getById(request, response));
-        this._webServer.registerPost(`${this.route}/query`, (request: IRequest, response: IResponse) =>
+
+        this._webServer.registerProtectedPost(`${this.route}/query`, (request: IRequest, response: IResponse) =>
             this.find(request, response));
     }
     async getById(request: IRequest, response: IResponse) {
