@@ -4,7 +4,7 @@ import { TYPES } from "./config/inversify.types";
 import IController from "./routes/controller";
 import { IWebServer } from "./webserver/IWebServer";
 import config from "./config/config";
-import { databaseManager } from "./database/schema";
+import { databaseManager } from "./database/databaseManager";
 
 const port = config.PORT;
 const controllers = container.getAll<IController>(TYPES.IController)

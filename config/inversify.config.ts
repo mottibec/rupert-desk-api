@@ -14,6 +14,7 @@ import workbookService from "../services/workbookService";
 import passwordHashService from "../services/passwordHashService";
 import { userService } from "../services/userService";
 import { workbookRepository } from "../database/workbookRepository";
+import { databaseManager } from "../database/databaseManager";
 
 
 const container = new Container();
@@ -21,6 +22,11 @@ const container = new Container();
 //web server
 container.bind<IWebServer>(TYPES.IWebServer)
     .to(ExpressWebServer)
+    .inSingletonScope();
+
+//db
+container.bind<databaseManager>(TYPES.databaseManager)
+    .to(databaseManager)
     .inSingletonScope();
 
 //repo
