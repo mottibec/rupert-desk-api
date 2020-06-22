@@ -16,7 +16,7 @@ export class postgresRepository<TEntity> implements IRepository<TEntity> {
     }
     async create(item: TEntity): Promise<boolean> {
         try {
-            const result = await this.knex<TEntity>("workbook").insert(item);
+            const result = await this.knex("workbook").insert(item);
             return result != null;
         } catch (error) {
             console.log("error", error);
