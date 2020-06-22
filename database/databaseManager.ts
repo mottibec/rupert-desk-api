@@ -15,19 +15,20 @@ export class databaseManager {
     getConnection() {
         return this._knex;
     }
-    initilize() {
-        this.createWoorkbooks();
-        this.createViews();
+    async initilize() {
+        await this.createWoorkbooks();
+        await this.createViews();
     }
-    createWoorkbooks() {
-        this._knex.schema.table("workbooks", table => {
+    async createWoorkbooks() {
+        await this._knex.schema.createTable("workbooks", table => {
             table.string("id");
             table.string("name");
-            table.string("url");
+            table.string("contentUrl");
+            table.string("webpageUrl");
         })
     }
-    createViews() {
-        this._knex.schema.table("views", table => {
+    async createViews() {
+        await this._knex.schema.createTable("views", table => {
             table.string("id");
             table.string("name");
             table.string("url");

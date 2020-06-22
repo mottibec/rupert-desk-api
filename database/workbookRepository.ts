@@ -1,7 +1,6 @@
 import { postgresRepository } from "./postgresRepository";
 import { workbook } from "../models/workbook";
 import { injectable, inject } from "inversify";
-import { memoryRepository } from "./memoryRepository";
 import { databaseManager } from "./databaseManager";
 import { TYPES } from "../config/inversify.types";
 
@@ -15,7 +14,7 @@ export class workbookRepository extends postgresRepository<workbook> {
     }
     async findByString(query: string) {
         try {
-            const workbooks = await this.knex("workbook");
+            const workbooks = await this.knex("workbooks");
             return workbooks;
         } catch (error) {
             console.error(error);
