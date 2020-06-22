@@ -1,18 +1,19 @@
 import { IRepository } from "./IRepository";
 import pg from "knex";
 import config from "../config/config";
-import { injectable } from "inversify";
-import { workbook } from "../models/workbook";
+import { injectable, inject } from "inversify";
+import { databaseManager } from "./databaseManager";
+import { TYPES } from "../config/inversify.types";
 
 @injectable()
 export class postgresRepository<TEntity> implements IRepository<TEntity> {
     protected knex: pg<any, unknown[]>;
+
+    @inject(TYPES.WorkbookRepository)
+    private _dbManager!: databaseManager;
+
     constructor() {
-        this.knex = pg({
-            client: 'pg',
-            connection: config.databaseConnectionString,
-            searchPath: ['knex', 'public'],
-        });
+        this.knex = this._dbManager.getConnection();
     }
     async create(item: TEntity): Promise<boolean> {
         try {

@@ -10,7 +10,7 @@ export class workbookRepository extends postgresRepository<workbook> {
     }
     async findByString(query: string) {
         try {
-            const workbooks = await this.knex();
+            const workbooks = await this.knex("workbook");
             return workbooks;
         } catch (error) {
             console.error(error);

@@ -37,6 +37,7 @@
     "@types/passport-jwt": "^3.0.3",
     "@types/passport-local": "^1.0.33",
     "@types/socket.io": "^2.1.4",
+    "@types/jest": "^26.0.0",
     "axios": "^0.19.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
@@ -46,6 +47,7 @@
     "google-auth-library": "^4.2.6",
     "inversify": "^5.0.1",
     "jsonwebtoken": "^8.5.1",
+    "jest": "^26.0.1",
     "knex": "^0.21.1",
     "mongoose": "^5.7.14",
     "passport": "^0.4.0",
@@ -62,10 +64,6 @@
     "typescript": "^3.7.3"
   },
   "snyk": true,
-  "devDependencies": {
-    "@types/jest": "^26.0.0",
-    "jest": "^26.0.1"
-  },
   "directories": {
     "test": "tests"
   },
