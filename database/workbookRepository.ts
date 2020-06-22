@@ -9,10 +9,8 @@ export class workbookRepository extends postgresRepository<workbook> {
         var isAllSuccsess = workbooks.map(workbook => this.create(workbook));
     }
     async findByString(query: string) {
-        console.log("query", query);
         try {
             const workbooks = await this.knex();
-            console.log("workbooks", workbooks);
             return workbooks;
         } catch (error) {
             console.error(error);

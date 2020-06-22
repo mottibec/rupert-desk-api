@@ -50,6 +50,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = __importDefault(require("axios"));
 var inversify_1 = require("inversify");
+var workbook_1 = require("../models/workbook");
 var credentialsProvider_1 = require("../credentials/credentialsProvider");
 var tableau_1 = require("../credentials/tableau");
 var workbookService_1 = __importDefault(require("../services/workbookService"));
@@ -153,7 +154,7 @@ var tableauIntegration = /** @class */ (function () {
                         return [4 /*yield*/, axios_1.default.get(url, this.getDefaultConfig())];
                     case 1:
                         response = _a.sent();
-                        return [2 /*return*/, response.data.workbooks.workbook.map(function (w) { return w; })];
+                        return [2 /*return*/, response.data.workbooks.workbook.map(function (w) { return new workbook_1.workbook(w.id, w.name, w.contentUrl, w.webpageUrl); })];
                 }
             });
         });
