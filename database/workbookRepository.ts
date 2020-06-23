@@ -15,7 +15,11 @@ export class workbookRepository extends postgresRepository<workbook> {
     }
     async findByString(query: string) {
         try {
-            const workbooks = await this.knex("workbooks");
+            const orQuery = query.split(' ').join(' | ');
+            const tsquery = `to_tsquery('${orQuery}');`;
+            const tsvector = `to_tsvector(name || ' ' || id)`;
+            const result = await this.knex.raw(`select * from workbooks WHERE ${tsvector} @@ ${tsquery}`);
+            const workbooks = result.rows;
             return workbooks;
         } catch (error) {
             console.error(error);

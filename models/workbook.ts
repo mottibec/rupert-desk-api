@@ -7,7 +7,6 @@ export class workbook implements entity {
     webpageUrl!: string;
     createdAt!: string;
     updatedAt!: string;
-    entityName = "workbook";
     constructor(id: string, name: string, contentUrl: string, webpageUrl: string) {
         this.id = id;
         this.name = name;
