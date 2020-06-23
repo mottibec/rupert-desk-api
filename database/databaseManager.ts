@@ -21,7 +21,7 @@ export class databaseManager {
         await this.createUsers();
     }
     async createWoorkbooks() {
-        await this._knex.schema.createTable("workbooks", table => {
+        await this._knex.schema.createTableIfNotExists("workbooks", table => {
             table.string("id");
             table.string("name");
             table.string("contentUrl");
@@ -29,7 +29,7 @@ export class databaseManager {
         })
     }
     async createViews() {
-        await this._knex.schema.createTable("views", table => {
+        await this._knex.schema.createTableIfNotExists("views", table => {
             table.string("id");
             table.string("name");
             table.string("url");
@@ -37,11 +37,10 @@ export class databaseManager {
         });
     }
     async createUsers() {
-        await this._knex.schema.createTable("users", table => {
-            table.increments("id");
+        await this._knex.schema.createTableIfNotExists("users", table => {
             table.string("name");
             table.string("email");
-            table.json("hashedPassword")
+            table.string("hashedPassword")
         });
     }
 }

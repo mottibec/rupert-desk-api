@@ -7,6 +7,7 @@ import { IRequest, IResponse } from "../webserver/IWebRequest";
 import JWTService from "../services/jwtService";
 import { userService } from "../services/userService";
 import passwordHashService from "../services/passwordHashService";
+import user from "../models/user";
 
 @injectable()
 export default class authenticationController implements IController {
@@ -51,11 +52,8 @@ export default class authenticationController implements IController {
         }
         response.status(400);
     }
-    async createUser(signUpData: any): Promise<any> {
-        const user = {
-            password: ""
-        };
-        user.password = await this._passwordHash.hash(signUpData.password);
-        return user;
+    async createUser(signUpData: any): Promise<user> {
+        const hash = await this._passwordHash.hash(signUpData.password);
+        return new user(signUpData.email, hash);
     }
 }

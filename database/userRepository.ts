@@ -8,6 +8,7 @@ import { databaseManager } from "./databaseManager";
 export class userRepository extends postgresRepository<user> {
     constructor(@inject(TYPES.databaseManager) dbManager: databaseManager) {
         super(dbManager)
+        this.entityName = "users";
     }
     async findByEmail(email: string): Promise<user | undefined> {
         const user = await this.knex<user>("users")

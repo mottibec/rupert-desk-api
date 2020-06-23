@@ -7,7 +7,8 @@ import { TYPES } from "../config/inversify.types";
 @injectable()
 export class workbookRepository extends postgresRepository<workbook> {
     constructor(@inject(TYPES.databaseManager) dbManager: databaseManager) {
-        super(dbManager)
+        super(dbManager);
+        this.entityName = "workbooks";
     }
     save(workbooks: workbook[]) {
         var isAllSuccsess = workbooks.map(workbook => this.create(workbook));
