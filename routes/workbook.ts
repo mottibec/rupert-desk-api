@@ -7,7 +7,7 @@ import workbookService from "../services/workbookService";
 
 @injectable()
 export class workbookController implements IController {
-    route: string = "/workbook";
+    route: string = "/workbooks";
 
     @inject(TYPES.IWebServer)
     private _webServer!: IWebServer;
