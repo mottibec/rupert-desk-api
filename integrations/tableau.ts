@@ -27,7 +27,7 @@ export class tableauIntegration implements IIntegrationProvider {
     }
 
     register(webServer: IWebServer, route: string) {
-        webServer.registerPost(`${route}/${this.name}`, (request: IRequest, response: IResponse) =>
+        webServer.registerProtectedPost(`${route}/${this.name}`, (request: IRequest, response: IResponse) =>
             this.process(request, response)
         );
     }

@@ -31,7 +31,7 @@ export class LocalAuthProvider implements IAuthProvider {
             session: false
         }, async (...args) => this.verifyAccount(...args)));
 
-        webServer.registerPost(`${route}/login`, (request: any, response: any, next: any) =>
+        webServer.registerPost(`${route}/signin`, (request: any, response: any, next: any) =>
             passport.authenticate("local", { session: false }, (err, user, info) => {
                 if (err || !user) {
                     return response
@@ -43,7 +43,7 @@ export class LocalAuthProvider implements IAuthProvider {
                         });
                 }
                 const token = this._jwtService.sign(user);
-                return response.json({ username: user.name, access_token: token });
+                return response.json({ username: user.email, access_token: token });
             })(request, response, next)
         );
         this._jwtService.register();

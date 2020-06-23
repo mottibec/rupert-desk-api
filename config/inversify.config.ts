@@ -15,6 +15,7 @@ import passwordHashService from "../services/passwordHashService";
 import { userService } from "../services/userService";
 import { workbookRepository } from "../database/workbookRepository";
 import { databaseManager } from "../database/databaseManager";
+import { userRepository } from "../database/userRepository"
 
 
 const container = new Container();
@@ -32,6 +33,10 @@ container.bind<databaseManager>(TYPES.databaseManager)
 //repo
 container.bind<workbookRepository>(TYPES.WorkbookRepository)
     .to(workbookRepository)
+    .inSingletonScope();
+
+container.bind<userRepository>(TYPES.userRepository)
+    .to(userRepository)
     .inSingletonScope();
 
 //services

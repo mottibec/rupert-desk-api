@@ -18,9 +18,10 @@ export class databaseManager {
     async initilize() {
         await this.createWoorkbooks();
         await this.createViews();
+        await this.createUsers();
     }
     async createWoorkbooks() {
-        await this._knex.schema.createTable("workbooks", table => {
+        await this._knex.schema.createTableIfNotExists("workbooks", table => {
             table.string("id");
             table.string("name");
             table.string("contentUrl");
@@ -28,11 +29,18 @@ export class databaseManager {
         })
     }
     async createViews() {
-        await this._knex.schema.createTable("views", table => {
+        await this._knex.schema.createTableIfNotExists("views", table => {
             table.string("id");
             table.string("name");
             table.string("url");
             table.json("tags")
+        });
+    }
+    async createUsers() {
+        await this._knex.schema.createTableIfNotExists("users", table => {
+            table.string("name");
+            table.string("email");
+            table.string("hashedPassword")
         });
     }
 }
