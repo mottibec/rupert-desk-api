@@ -7,7 +7,7 @@ import { IRequest, IResponse } from "../webserver/IWebRequest";
 
 @injectable()
 export default class integrationController implements IController {
-    route: string = "/integration";
+    route: string = "/integrations";
 
     @inject(TYPES.IWebServer)
     private _webServer!: IWebServer;

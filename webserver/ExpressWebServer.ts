@@ -8,6 +8,8 @@ import JWTService from "../services/jwtService";
 import { TYPES } from "../config/inversify.types";
 import path from "path";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import * as swaggerDocument from '../swagger.json';
 
 
 @injectable()
@@ -26,6 +28,7 @@ export default class ExpressWebServer implements IWebServer {
         this._app.use(passport.initialize());
         this._app.use(cors());
         this._router = Router();
+        this._app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     }
     public start(port: number, callback: () => void) {
         this._app.use('/', this._router);

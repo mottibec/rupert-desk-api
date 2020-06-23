@@ -1,0 +1,149 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "rupert-desk-api",
+        "description": "rupert desk api",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:4000/",
+            "description": "Local server"
+        },
+        {
+            "url": "https://rupert-desk-api.herokuapp.com/",
+            "description": "prod server"
+        }
+    ],
+    "paths": {
+        "/integrations": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Get integrations",
+                "operationId": "getIntegrations",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/workbooks": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Get Workbooks",
+                "operationId": "getWorkbooks",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Workbook"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/workbooks/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Get Workbook by id",
+                "operationId": "getWorkbookById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Workbook ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Workbook"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/workbooks/query": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Get Workbooks by query",
+                "operationId": "getWorkbooksByQuery",
+                "requestBody": {
+                    "description": "query",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Query"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "schemas": {
+            "Workbook": {
+                "type": "object\nproperties:\n  name:\n    type: string\n  id:\n    type: string\n  webpageUrl:\n    type: string\n  contentUrl:\n    type: string"
+            },
+            "integrations": {
+                "type": "object\nproperties:\n  name:\n    type: string\n  loginUrl:\n    type: string\n  supportedAuthenticationMethods:\n    type: array"
+            },
+            "Query": {
+                "type": "object\nproperties:\n  query:\n    type: string"
+            }
+        }
+    },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ]
+}
