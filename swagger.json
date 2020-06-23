@@ -40,6 +40,51 @@
                 }
             }
         },
+        "/integrations/{name}": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "connect to integration",
+                "operationId": "connectToIntegration",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "integration name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "integration auth params",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/integrationAuth"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Workbook"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/workbooks": {
             "get": {
                 "security": [
@@ -131,19 +176,52 @@
         },
         "schemas": {
             "Workbook": {
-                "type": "object\nproperties:\n  name:\n    type: string\n  id:\n    type: string\n  webpageUrl:\n    type: string\n  contentUrl:\n    type: string"
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "string"
+                    },
+                    "webpageUrl": {
+                        "type": "string"
+                    },
+                    "contentUrl": {
+                        "type": "string"
+                    }
+                }
             },
             "integrations": {
-                "type": "object\nproperties:\n  name:\n    type: string\n  loginUrl:\n    type: string\n  supportedAuthenticationMethods:\n    type: array"
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "loginUrl": {
+                        "type": "string"
+                    },
+                    "supportedAuthenticationMethods": {
+                        "type": "array"
+                    }
+                }
             },
             "Query": {
-                "type": "object\nproperties:\n  query:\n    type: string"
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string"
+                    }
+                },
+                "integrationAuth": {
+                    "type": "array"
+                }
             }
-        }
-    },
-    "security": [
-        {
-            "bearerAuth": []
-        }
-    ]
+        },
+        "security": [
+            {
+                "bearerAuth": []
+            }
+        ]
+    }
 }
