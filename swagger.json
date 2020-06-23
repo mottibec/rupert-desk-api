@@ -20,6 +20,58 @@
         }
     ],
     "paths": {
+        "/auth/signup": {
+            "post": {
+                "description": "sign up",
+                "operationId": "signup",
+                "parameters": [],
+                "requestBody": {
+                    "description": "integration auth params",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/localAuth"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signin": {
+            "post": {
+                "description": "Get integrations",
+                "operationId": "getIntegrations",
+                "parameters": [],
+                "requestBody": {
+                    "description": "integration auth params",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/localAuth"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
         "/integrations": {
             "get": {
                 "security": [
@@ -212,9 +264,20 @@
                     "query": {
                         "type": "string"
                     }
-                },
-                "integrationAuth": {
-                    "type": "array"
+                }
+            },
+            "integrationAuth": {
+                "type": "array"
+            },
+            "localAuth": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
                 }
             }
         },
