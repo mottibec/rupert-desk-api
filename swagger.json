@@ -106,7 +106,18 @@
                     }
                 ],
                 "description": "Get Workbooks by query",
-                "operationId": "getWorkbooksByQuery\nrequestBody:\n  description: Optional description in *Markdown*\n  required: true\n  content:\n    application/json:\n      schema:\n        $ref: '#/components/schemas/Query'"
+                "operationId": "getWorkbooksByQuery",
+                "requestBody": {
+                    "description": "query",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Query"
+                            }
+                        }
+                    }
+                }
             }
         }
     },
