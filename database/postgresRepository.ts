@@ -33,7 +33,10 @@ export class postgresRepository<TEntity extends entity> implements IRepository<T
         return result as TEntity;
     }
     async findById(id: string): Promise<TEntity | null> {
-        const result = await this.knex<TEntity>(this.entityName).where(id).first();
+        const query = { id: id };
+        const result = await this.knex<TEntity>(this.entityName)
+            .where(query)
+            .first();
         return result as TEntity;
     }
     async getAll() {
