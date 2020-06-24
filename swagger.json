@@ -267,7 +267,7 @@
                 }
             },
             "integrationAuth": {
-                "type": "array"
+                "type": "object"
             },
             "localAuth": {
                 "type": "object",
