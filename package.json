@@ -48,7 +48,7 @@
     "google-auth-library": "^4.2.6",
     "inversify": "^5.0.1",
     "jest": "^26.0.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "knex": "^0.21.1",
     "mongoose": "^5.7.14",
     "passport": "^0.4.0",
